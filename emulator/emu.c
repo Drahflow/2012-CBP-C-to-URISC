@@ -6,6 +6,52 @@
 #include <stdio.h>
 #include <string.h>
 
+/* ==== Machine Spec ====
+ *
+ * This implements a URISC machine with the following features:
+ *   * 1 instruction
+ *   * 1 register
+ *   * 16 bit data width
+ *   * 16 bit logical address width
+ *   * 31 bit physical address width
+ *   * memory mapped IO for display and keyboard
+ * 
+ * ==== Instruction ====
+ *
+ * The instruction takes an address argument.
+ * 1. it loads the data at that address.
+ * 2. it substracts the accumulator from that data.
+ * 3. if this substraction resulted in underflow
+ * 3a. it increments the program counter by 2, otherwise
+ * 3b. it increments the program counter by 1.
+ * 4. it writes the result of the computation into
+ *    the register and the memory at the address.
+ *
+ * ==== Memory Layout ====
+ *
+ *          0x0000: This memory address holds the program counter
+ *          0x0001: Memory mapped IO high address lines
+ *          0x0002: Code start after reset
+ * 0x0002 - 0x7FFF: General purpose RAM
+ * 0x8000 - 0xFFFF: Area for memory mapped IO
+ *
+ * ==== IO Interfaces ====
+ *
+ * The addresses given include the set bit due to the
+ * logical memory mapping.
+ *
+ *              0x00008000: keyboard data, with the following bit fields
+ *                          0x8000: set if new data is ready
+ *                          0x0800: set if keyboard data has been lost
+ *                                  if this occurs, poll faster
+ *                          0x00FF: the character entered, in ASCII
+ *
+ *              0x00008002: screen width in pixels
+ *              0x00008003: screen height in pixels
+ *
+ * 0x00018000 - 0x0001FFFF: screen pixel data
+ */
+
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 64
 #define DISPLAY_ZOOM 4

@@ -1,3 +1,9 @@
+%{
+  #define YYERROR_VERBOSE
+%}
+
+%locations
+
 %union {
   char	*name;
   int	num;
@@ -37,6 +43,8 @@ variable_definition: type_definition NAME ';';
 
 function_definition: type_definition NAME '(' parameter_list ')' block;
 
+// function_type_definition: VOID | INT;
+
 type_definition: INT;
 
 parameter_list: VOID
@@ -49,7 +57,9 @@ parameter: type_definition NAME;
 
 block: ';'
   | '{' variable_definitions commands '}'
-  | '{' commands '}';
+  | '{' commands '}'
+  | '{' '}'
+  ;
 
 variable_definitions: variable_definitions variable_definition
   | variable_definition;
@@ -68,7 +78,7 @@ command: block
 ifclause: IF '(' expression ')';
 
 expression: NAME '=' expression
-  | NAME '(' values ')' ';'
+  | NAME '(' values ')'
   | '*' expression '=' expression
   | expression '+' expression
   | expression '-' expression
@@ -90,5 +100,6 @@ expression: NAME '=' expression
   | NUM
   | '-' NUM;
 
-values: values ',' expression
+values: /* no function arguments */
+  | values ',' expression
   | expression

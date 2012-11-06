@@ -3,7 +3,7 @@
 %{
   #include <stdio.h>
   #include <string.h>
-  #include "simple_c.tab.h"
+  #include "simple_c.tab.hh"
   #define YY_USER_ACTION yylloc.first_line = yylineno;
   
 %}

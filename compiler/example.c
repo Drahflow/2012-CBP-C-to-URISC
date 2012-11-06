@@ -2,7 +2,7 @@
  * shortened sample program for parser testing, with data omitted
  */
 
-int data[3] = { 42, 1337, 23, /* , ... */ };
+int data[3] = { 42, 1337, 23 /* , ... */ };
 
 int drawbyte(int pos, int b)
 {

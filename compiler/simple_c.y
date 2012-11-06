@@ -1,13 +1,49 @@
+%code requires {
+  #include "ast.h"
+}
+
 %{
   #define YYERROR_VERBOSE
+  
+  void yyerror(char* msg);
+  int yylex(); 
 %}
 
 %locations
 
 %union {
-  char	*name;
+  // tokens with values
+  char*	name;
   int	num;
+  
+  // non-terminals
+  Program*			prog;
+  VariableDef*			var_def;
+  std::vector<int>*		int_list;
+  std::vector<Command*>*	command_list;
+  Command*			command;
+  Type				type;
+  Expression*			expression;
 }
+
+%{
+  // AST root is stored here
+  Program* parser_result = NULL;
+%}
+
+%type <prog> program;
+%type <var_def> global_variable_definition variable_definition 
+%type <int_list> var_init_list
+%type <type> type_definition
+%type <command_list> commands
+%type <command> command
+%type <expression> ifclause
+%type <expression> expression
+%type <command> block
+
+%destructor { delete $$; } <int_list>
+%destructor { delete $$; } <command_list>
+%destructor { free($$); } <name>
 
 %token <num> NUM
 %token <name> NAME
@@ -27,25 +63,37 @@
 
 %%
 
-program: program global_variable_definition
-  | program function_definition
-  | global_variable_definition
-  | function_definition;
+program: program global_variable_definition { $1->add($2); $$ = $1; }
+  | program function_definition { /* $1->add($2); $$ = $1; */ }
+  | global_variable_definition { $$ = new Program(@1.first_line); $$->add($1); parser_result = $$; }
+  | function_definition {  $$ = new Program(@1.first_line); /* $$->add($1); */ parser_result = $$; };
 
-global_variable_definition: variable_definition
+global_variable_definition: variable_definition { $$ = $1; }
   | type_definition NAME '=' '{' var_init_list '}' ';'
-  | type_definition NAME '[' NUM ']' '=' '{' var_init_list '}' ';';
+    { 
+      IntArrayDef* a = new IntArrayDef(@$.first_line, $2);
+      a->initialize(*($5));
+      delete $5;
+      $$ = a;
+    }
+  | type_definition NAME '[' NUM ']' '=' '{' var_init_list '}' ';'
+    {
+      IntArrayDef* a = new IntArrayDef(@$.first_line, $2, $4);
+      a->initialize(*($8));
+      delete $8;
+      $$ = a; 
+    };
 
-var_init_list: var_init_list ',' NUM
-  | NUM;
+var_init_list: var_init_list ',' NUM { $$ = $1; $1->push_back($3); }
+  | NUM { $$ = new std::vector<int>(); $$->push_back($1); };
 
-variable_definition: type_definition NAME ';';
+variable_definition: type_definition NAME ';' { $$ = new VariableDef(@$.first_line, $1, $2); };
 
 function_definition: type_definition NAME '(' parameter_list ')' block;
 
 // function_type_definition: VOID | INT;
 
-type_definition: INT;
+type_definition: INT { $$ = TYPE_INT; };
 
 parameter_list: VOID
   | parameters;
@@ -55,27 +103,27 @@ parameters: parameter
   
 parameter: type_definition NAME;
 
-block: ';'
-  | '{' variable_definitions commands '}'
-  | '{' commands '}'
-  | '{' '}'
+block: ';' { $$ = new Block(@$.first_line); } 
+  | '{' variable_definitions commands '}' { /* $$ = new Block(@$.first_line, $3, $2); delete $2; delete $3; */ } 
+  | '{' commands '}' { $$ = new Block(@$.first_line, *($2)); delete $2; }
+  | '{' '}' { $$ = new Block(@$.first_line); }
   ;
 
 variable_definitions: variable_definitions variable_definition
   | variable_definition;
 
-commands: commands command
-  | command;
+commands: commands command { $$ = $1; $1->push_back($2);  }
+  | command { $$ = new std::vector<Command*>(); $$->push_back($1); };
 
-command: block
-  | expression ';'
-  | ifclause command
-  | ifclause command ELSE command
-  | WHILE '(' expression ')' command
-  | RETURN expression ';'
-  | FOR '(' expression ';' expression ';' expression ')' command;
+command: block { $$ = $1; }
+  | expression ';' { $$ = $1; }
+  | ifclause command { $$ = new If(@$.first_line, $1, $2); }
+  | ifclause command ELSE command { $$ = new If(@$.first_line, $1, $2, $4); }
+  | WHILE '(' expression ')' command { $$ = new While(@$.first_line, $3, $5); }
+  | RETURN expression ';' { $$ = new Return(@$.first_line, $2); }
+  | FOR '(' expression ';' expression ';' expression ')' command { $$ = new For(@$.first_line, $3, $5, $7, $9); };
 
-ifclause: IF '(' expression ')';
+ifclause: IF '(' expression ')' { $$ = $3; };
 
 expression: NAME '=' expression
   | NAME '(' values ')'

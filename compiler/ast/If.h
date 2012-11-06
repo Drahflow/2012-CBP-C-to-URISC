@@ -1,0 +1,17 @@
+#ifndef IF_H
+#define IF_H
+
+#include "Command.h"
+#include "Expression.h"
+
+class If : public Command
+{
+  Expression* condition;
+  Command* thenBranch;
+  Command* elseBranch;
+  public:
+    If(int line, Expression* cond, Command* then, Command* els = NULL) 
+      : Command(line), condition(cond), thenBranch(then), elseBranch(els) { }
+};
+
+#endif

@@ -9,7 +9,7 @@ extern Program* parser_result;
 
 int yyparse();
 
-int yyerror(char* msg)
+int yyerror(const char* msg)
 {
   cout << "line " << yylloc.first_line << ": " << msg << endl;
 }

@@ -5,7 +5,7 @@
 %{
   #define YYERROR_VERBOSE
   
-  void yyerror(char* msg);
+  void yyerror(const char* msg);
   int yylex(); 
 %}
 

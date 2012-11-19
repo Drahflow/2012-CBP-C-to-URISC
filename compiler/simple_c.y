@@ -54,10 +54,17 @@
 %token RETURN
 %token FOR
 %token IF
-%token GTEQ
-%token LTEQ
-%token EQ
-%token NE
+// %token GTEQ
+// %token LTEQ
+// %token EQ
+// %token NE
+
+%left '<' '>' GTEQ LTEQ EQ NE
+%left '+' '-'
+%left '*' '/'
+%left '&' '|'
+%left '!'
+%right '='
 
 %start program
 

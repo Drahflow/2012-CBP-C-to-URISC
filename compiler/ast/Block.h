@@ -2,6 +2,7 @@
 #define BLOCK_H
 
 #include <vector>
+#include <string>
 #include "Command.h"
 #include "VariableDef.h"
 

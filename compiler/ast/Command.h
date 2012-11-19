@@ -7,7 +7,7 @@
 class Command : public Node
 {
   public:
-    std::string explain() { return "TODO in subclasses"; }
+    std::string explain(int ind) { return indent(ind) + "TODO in subclasses\n"; }
     Command(int line) : Node(line) { }
 };
 

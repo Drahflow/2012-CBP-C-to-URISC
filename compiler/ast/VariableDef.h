@@ -13,7 +13,7 @@ class VariableDef : public Node
     VariableDef(int line, Type type, char* name) : Node(line), type(type), name(std::string(name)) { }
     std::string getName() { return name; }
     Type getType() { return type; }
-    std::string explain();
+    std::string explain(int ind);
 };
 
 

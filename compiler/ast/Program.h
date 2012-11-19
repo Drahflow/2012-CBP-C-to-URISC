@@ -11,7 +11,7 @@ class Program : public Node
   public:
     Program(int line) : Node(line) { };
     void add(Node* node) { definitions.push_back(node); }
-    std::string explain();
+    std::string explain(int ind = 0);
 };
 
 #endif

@@ -21,7 +21,7 @@ class IntArrayDef : public VariableDef
     }
     
     IntArrayDef(int line, char* name, int size = -1) : VariableDef(line, TYPE_INT, name), size(size) { }
-    std::string explain();
+    std::string explain(int ind);
 };
 
 #endif

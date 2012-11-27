@@ -144,21 +144,22 @@ expression:
   | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}
   | expression '*' expression { $$ = new Multiplication(@$.first_line, $1, $3);}
   | expression '/' expression { $$ = new Division(@$.first_line, $1, $3);}
-  | expression '&' expression 
-  | expression '|' expression
-  | expression EQ expression  
-  | expression NE expression
-  | expression '<' expression
-  | expression '>' expression
-  | expression LTEQ expression
-  | expression GTEQ expression
-  | '(' expression ')' {$$ = $2;}
-  | '!' expression
-  | NAME
+  | expression '&' expression { $$ = new And(@$.first_line, $1, $3);} 
+  | expression '|' expression { $$ = new Or(@$.first_line, $1, $3);} 
+  | expression EQ expression  { $$ = new Equal(@$.first_line, $1, $3);}
+  | expression NE expression  { $$ = new NotEqual(@$.first_line, $1, $3);}
+  | expression '<' expression { $$ = new Less(@$.first_line, $1, $3);}
+  | expression '>' expression { $$ = new Greater(@$.first_line, $1, $3);}
+  | expression LTEQ expression{ $$ = new LessOrEqual(@$.first_line, $1, $3);}
+  | expression GTEQ expression{ $$ = new GreaterOrEqual(@$.first_line, $1, $3);}
+  | '(' expression ')'        { $$ = $2;}
+  | '!' expression            { $$ = new Not(@$.first_line, $2);}
+  | NAME                      { $$ = new ExpressionName(@$.first_line,$1);}
   | NAME '[' expression ']'
   | '*' expression
-  | NUM 
-  | '-' NUM;
+  | NUM                       { $$ = new ExpressionNum(@$.first_line,$1);}
+  | '-' NUM                   { $$ = new Negate(@$.first_line,$2); }
+  ;
 
 values: /* no function arguments */
   | values ',' expression

@@ -1,5 +1,5 @@
 %code requires {
-  #include "ast.h"
+ #include "ast.h"
 }
 
 %{
@@ -136,27 +136,28 @@ command: block { $$ = $1; }
 
 ifclause: IF '(' expression ')' { $$ = $3; };
 
-expression: NAME '=' expression
+expression: 
+    NAME '=' expression
   | NAME '(' values ')'
   | '*' expression '=' expression
-  | expression '+' expression
-  | expression '-' expression
-  | expression '*' expression
-  | expression '/' expression
-  | expression '&' expression
+  | expression '+' expression { $$ = new Addition(@$.first_line, $1,$3);}
+  | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}
+  | expression '*' expression { $$ = new Multiplication(@$.first_line, $1, $3);}
+  | expression '/' expression { $$ = new Division(@$.first_line, $1, $3);}
+  | expression '&' expression 
   | expression '|' expression
-  | expression EQ expression
+  | expression EQ expression  
   | expression NE expression
   | expression '<' expression
   | expression '>' expression
   | expression LTEQ expression
   | expression GTEQ expression
-  | '(' expression ')'
+  | '(' expression ')' {$$ = $2;}
   | '!' expression
   | NAME
   | NAME '[' expression ']'
   | '*' expression
-  | NUM
+  | NUM 
   | '-' NUM;
 
 values: /* no function arguments */

@@ -5,7 +5,8 @@
 
 class Expression : public Command
 {
-
+	public:
+	Expression(int line) : Command(line) {}
 };
 
 #endif

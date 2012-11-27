@@ -9,9 +9,9 @@ class FunctionDef : public Node
 {
   Type type;
   std::string name;
-  //Block block;
+  Block *block;
   public:
-    FunctionDef(int line, Type type, char* name) : Node(line) { }
+    FunctionDef(int line, Type type, char* name, Block *block) : Node(line), block(block) { }
     std::string getName() { return name; }
     Type getType() { return type; }
     std::string explain(int ind);

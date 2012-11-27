@@ -25,6 +25,7 @@
   Type				type;
   Expression*			expression;
   FunctionDef*          function_def;
+  Block*                block;
 }
 
 %{
@@ -40,7 +41,7 @@
 %type <command> command
 %type <expression> ifclause
 %type <expression> expression
-%type <command> block
+%type <block> block
 %type <function_def> function_definition
 
 %destructor { delete $$; } <int_list>
@@ -100,7 +101,7 @@ variable_definition:
   type_definition NAME ';' { $$ = new VariableDef(@$.first_line, $1, $2); };
 
 function_definition:
-  type_definition NAME '(' parameter_list ')' block { $$ = new FunctionDef(@$.first_line, $1, $2); };
+  type_definition NAME '(' parameter_list ')' block { $$ = new FunctionDef(@$.first_line, $1, $2, $6); };
 
 // function_type_definition: VOID | INT;
 

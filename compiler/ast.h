@@ -15,5 +15,6 @@
 #include "ast/Type.h"
 #include "ast/VariableDef.h"
 #include "ast/While.h"
+#include "ast/FunctionDef.h"
 
 #endif

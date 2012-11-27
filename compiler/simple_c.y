@@ -24,6 +24,7 @@
   Command*			command;
   Type				type;
   Expression*			expression;
+  FunctionDef*          function_def;
 }
 
 %{
@@ -40,6 +41,7 @@
 %type <expression> ifclause
 %type <expression> expression
 %type <command> block
+%type <function_def> function_definition
 
 %destructor { delete $$; } <int_list>
 %destructor { delete $$; } <command_list>
@@ -94,9 +96,11 @@ global_variable_definition: variable_definition { $$ = $1; }
 var_init_list: var_init_list ',' NUM { $$ = $1; $1->push_back($3); }
   | NUM { $$ = new std::vector<int>(); $$->push_back($1); };
 
-variable_definition: type_definition NAME ';' { $$ = new VariableDef(@$.first_line, $1, $2); };
+variable_definition:
+  type_definition NAME ';' { $$ = new VariableDef(@$.first_line, $1, $2); };
 
-function_definition: type_definition NAME '(' parameter_list ')' block;
+function_definition:
+  type_definition NAME '(' parameter_list ')' block { $$ = new FunctionDef(@$.first_line, $1, $2); };
 
 // function_type_definition: VOID | INT;
 

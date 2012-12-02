@@ -164,6 +164,7 @@ int main(int argc, char **argv)
 {
 	int screennum;
 	int slow, debug, i;
+        int binary;
 	Window root_window;
 	Window win;
 	int winx,winy;
@@ -179,16 +180,20 @@ int main(int argc, char **argv)
 	slow = debug = fast = 0;
 	for(i = 1; i < argc; i++)
 	{
-		if(!strcmp(argv[i], "-s") || !strcmp(argv[i], "--slow"))
+		if(!strcmp(argv[i], "-s") || !strcmp(argv[i], "--slow")) {
 			slow = debug = 1;
-		else if(!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug"))
+                } else if(!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")) {
 			debug = 1;
-		else if(!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fast"))
+                } else if(!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fast")) {
 			fast = 1;
-		else if(!strcmp(argv[i], "-b") || !strcmp(argv[i], "--benchmark"))
+                } else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+                	printf("usage: ./emu [-s | --slow] [-f | --fast] [-d | --debug] [-h | --help]\n             [-b | --benchmark] [--binary] <file>\n");
+                        return 1;
+                } else if(!strcmp(argv[i], "--binary")) {
+			binary = 1;
+                } else if(!strcmp(argv[i], "-b") || !strcmp(argv[i], "--benchmark")) {
 			benchmark = 1;
-		else
-		{
+                } else {
 			if((fp = fopen(argv[i], "r")))
 			{
 				int pos = START;
@@ -196,33 +201,37 @@ int main(int argc, char **argv)
 				int buf;
 				printf("File loading in progress...");
 				fflush(stdout);
-				while(fgets(line, 1024, fp))
-				{
-					if(pos >= 0x8000)
-						break;
-					if(line[0] == ';' || line[0] == '\n')
-						continue;
-					if(line[0] == '.')
-					{
-						buf = -1;
-						sscanf(line+1, "%X", &buf);
-						if(buf == -1)
-						{
-							printf("File loading error - could not convert number\n");
-							continue;
-						}
-						pos = buf;
-						continue;
-					}
-					buf = -1;
-					sscanf(line, "%X", &buf);
-					if(buf == -1)
-					{
-						printf("File loading error - could not convert number\n");
-						continue;
-					}
-					basemem[pos++] = buf;
-				}
+                                if(binary) {
+                                  while(pos < 0x8000 && fread(basemem + pos++, 2, 1, fp) == 1);
+                                } else {
+                                  while(fgets(line, 1024, fp))
+                                  {
+                                          if(pos >= 0x8000)
+                                                  break;
+                                          if(line[0] == ';' || line[0] == '\n')
+                                                  continue;
+                                          if(line[0] == '.')
+                                          {
+                                                  buf = -1;
+                                                  sscanf(line+1, "%X", &buf);
+                                                  if(buf == -1)
+                                                  {
+                                                          printf("File loading error - could not convert number\n");
+                                                          continue;
+                                                  }
+                                                  pos = buf;
+                                                  continue;
+                                          }
+                                          buf = -1;
+                                          sscanf(line, "%X", &buf);
+                                          if(buf == -1)
+                                          {
+                                                  printf("File loading error - could not convert number\n");
+                                                  continue;
+                                          }
+                                          basemem[pos++] = buf;
+                                  }
+                                }
 				fclose(fp);
 				printf("done\n");
 				fflush(stdout);

@@ -12,7 +12,7 @@ class IntArrayDef : public VariableDef
   std::vector<int> data;
  
   public:
-    void initialize(std::vector<int> data)
+    void initialize(const std::vector<int>& data)
     {
       this->data = data;
       if(size < 0)

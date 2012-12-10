@@ -74,9 +74,9 @@
 %%
 
 program: program global_variable_definition { $1->add($2); $$ = $1; }
-  | program function_definition { /* $1->add($2); $$ = $1; */ }
+  | program function_definition {  $1->add($2); $$ = $1; }
   | global_variable_definition { $$ = new Program(@1.first_line); $$->add($1); parser_result = $$; }
-  | function_definition {  $$ = new Program(@1.first_line); /* $$->add($1); */ parser_result = $$; };
+  | function_definition {  $$ = new Program(@1.first_line);  $$->add($1); parser_result = $$; };
 
 global_variable_definition: variable_definition { $$ = $1; }
   | type_definition NAME '=' '{' var_init_list '}' ';'

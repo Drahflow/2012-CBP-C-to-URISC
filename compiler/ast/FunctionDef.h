@@ -4,6 +4,7 @@
 #include <string>
 #include "Type.h"
 #include "Node.h"
+#include "Block.h"
 
 class FunctionDef : public Node
 {
@@ -11,7 +12,7 @@ class FunctionDef : public Node
   std::string name;
   Block *block;
   public:
-    FunctionDef(int line, Type type, char* name, Block *block) : Node(line), block(block) { }
+    FunctionDef(int line, Type type, char* name, Block *block) : Node(line), block(block), name(name), type(type) { }
     std::string getName() { return name; }
     Type getType() { return type; }
     std::string explain(int ind);

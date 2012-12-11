@@ -1,6 +1,8 @@
 #ifndef AND_H
 #define AND_H
 
+#include <string>
+#include "Expression.h"
 #include "Command.h"
 
 class And: public Expression
@@ -9,6 +11,7 @@ class And: public Expression
 	Expression * augend;
 	Expression * addend;
 	And(int line, Expression *e1, Expression *e2) : Expression(line) { augend = e1; addend = e2;}
+	std::string explain(int ind);
 };
 
 #endif //AND_H

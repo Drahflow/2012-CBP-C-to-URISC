@@ -24,6 +24,7 @@
   Command*			command;
   Type				type;
   Expression*			expression;
+  std::vector<Expression*>*		values;
   FunctionDef*          function_def;
   Block*                block;
 }
@@ -43,6 +44,7 @@
 %type <expression> expression
 %type <block> block
 %type <function_def> function_definition
+%type <values> values;
 
 %destructor { delete $$; } <int_list>
 %destructor { delete $$; } <command_list>
@@ -138,8 +140,8 @@ command: block { $$ = $1; }
 ifclause: IF '(' expression ')' { $$ = $3; };
 
 expression: 
-    NAME '=' expression
-  | NAME '(' values ')'
+    NAME '=' expression       /*{ $$ = new Assignment(@$.first_line,$1,$3);}*/
+  | NAME '(' values ')'       /*{ $$ = new FunctionCall(@$.first_line,$1,$3);}*/
   | '*' expression '=' expression
   | expression '+' expression { $$ = new Addition(@$.first_line, $1,$3);}
   | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}
@@ -163,5 +165,6 @@ expression:
   ;
 
 values: /* no function arguments */
-  | values ',' expression
-  | expression
+  | values ',' expression { $$ = $1; $1->push_back($3); }
+  | expression            { $$ = new std::vector<Expression*>(); $$->push_back($1);}
+  ;

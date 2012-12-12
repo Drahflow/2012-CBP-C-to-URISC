@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class CodeContainer
 {
@@ -11,7 +12,9 @@ class CodeContainer
 	void push_back(int code);
 	int size();
 	int& operator[](int const& index);
-	std::string getCodeString(void); 
+	void addNOP();
+	void addClearAkk();
+    std::string getCodeString(void); 
 };
 
 #endif //CODECONTAINER_H

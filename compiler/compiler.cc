@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "simple_c.tab.hh"
 #include "utilityClasses/CodeContainer.h"
 #include "utilityClasses/SymbolTable.h"
@@ -30,6 +31,9 @@ int main(int argc, char** argv)
 	CodeContainer *codeContainer = new CodeContainer;
 	parser_result->codeGeneration1(codeContainer, symbolTable);
 	parser_result->codeGeneration2(codeContainer, symbolTable);
-	cout << codeContainer->getCodeString();
+	//std::ostringstream codeString = codeContainer->getCodeString();
+
+	std::string codeString = codeContainer->getCodeString();
+	cout << codeString;
 	return 0;
 }

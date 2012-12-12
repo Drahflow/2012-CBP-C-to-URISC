@@ -20,6 +20,7 @@ std::string Program::explain(int ind)
   return expl.str();
 }
 void Program::codeGeneration1(CodeContainer *codeContainer, SymbolTable *symbolTable) {
+	codeContainer->addClearAkk();
 }
 
 void Program::codeGeneration2(CodeContainer *codeContainer, SymbolTable *symbolTable) {

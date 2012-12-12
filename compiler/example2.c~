@@ -1,0 +1,10 @@
+/*
+ * shortened sample program for parser testing, with data omitted
+ */
+
+int i = {1 + 1};
+
+//int main(void)
+//{
+//  int i;
+//}

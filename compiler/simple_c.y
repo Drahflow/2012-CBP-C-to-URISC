@@ -140,8 +140,8 @@ command: block { $$ = $1; }
 ifclause: IF '(' expression ')' { $$ = $3; };
 
 expression: 
-    NAME '=' expression       /*{ $$ = new Assignment(@$.first_line,$1,$3);}*/
-  | NAME '(' values ')'       /*{ $$ = new FunctionCall(@$.first_line,$1,$3);}*/
+    NAME '=' expression       { $$ = new Assignment(@$.first_line,$1,$3);}
+  | NAME '(' values ')'       { $$ = new FunctionCall(@$.first_line,$1,$3);}
   | '*' expression '=' expression
   | expression '+' expression { $$ = new Addition(@$.first_line, $1,$3);}
   | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}

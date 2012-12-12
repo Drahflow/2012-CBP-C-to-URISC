@@ -33,5 +33,7 @@
 #include "ast/VariableDef.h"
 #include "ast/While.h"
 #include "ast/FunctionDef.h"
+#include "ast/FunctionCall.h"
+#include "ast/Assignment.h"
 
 #endif

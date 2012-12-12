@@ -1,4 +1,4 @@
-SRC=$(wildcard *.cc) $(wildcard ast/*.cc)
+SRC=$(wildcard *.cc) $(wildcard ast/*.cc) $(wildcard utilityClasses/*cc)
 EXCL=simple_c.tab.cc simple_c.lex.cc
 
 OBJ=simple_c.tab.o simple_c.lex.o $(patsubst %.cc, %.o, $(filter-out $(EXCL), $(SRC)))

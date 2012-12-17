@@ -17,7 +17,7 @@ class Program : public Node
 		void add(FunctionDef* def) { definitions.push_back(def); }
 		void codeGeneration1(CodeContainer *codeContainer, SymbolTable *symbolTable);
 		void codeGeneration2(CodeContainer *codeContainer, SymbolTable *symbolTable);
-
+		void generate(CodeContainer* code, SymbolTable* table) { codeGeneration1(code, table); }
 		std::string explain(int ind = 0);
 };
 

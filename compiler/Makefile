@@ -21,4 +21,4 @@ simple_c.lex.cc: simple_c.l
 	flex -o simple_c.lex.cc simple_c.l
 
 clean:
-	rm compiler simple_c.tab.hh simple_c.tab.cc simple_c.lex.cc *.o ast/*.o *.d ast/*.d
+	rm compiler simple_c.tab.hh simple_c.tab.cc simple_c.lex.cc *.o ast/*.o *.d ast/*.d utilityClasses/*.o utilityClasses/*.d

@@ -11,7 +11,52 @@ std::string If::explain(int ind)
   expl << condition->explain(ind + 1);
   expl << indent(ind) << "-then:" << endl;
   expl << thenBranch->explain(ind + 1);
-  if(elseBranch == NULL)
+  if(elseBranch != NULL)
     expl << endl << indent(ind) << "-else:" << endl << elseBranch->explain(ind + 1);
   return expl.str();
+}
+
+void If::allocateStatic(CodeContainer* code)
+{
+	if(zeroAddr < 0 && minOneAddr < 0)
+		return;
+    zeroAddr = code->allocate(0);
+    minOneAddr = code->allocate(0xFFFF); // -1 mod 2^16
+}
+
+void If::generate(CodeContainer* code, SymbolTable* table)
+{
+  // make sure we've allocated our memory used internally
+  allocateStatic(code);
+  // allocate constant for jump delta of else branch
+  int elseBranchAddr = code->allocate();
+  // generate code for condition expression
+  condition->generate(code, table);
+  code->addClear(zeroAddr);
+  // TODO get the address of the condition value
+  int memExprResult = 0xdeadbeef;
+  code->addLoad(memExprResult);
+  // compute 0 - *memExprResult for conditional jump
+  code->push_back(zeroAddr);
+  // on *memExprResult == 0 load new pc
+  code->push_back(elseBranchAddr);
+  code->push_back(zeroAddr);
+  // is skipped for *memExprResult != 0
+  code->push_back(minOneAddr);
+  // jump to else branch
+  unsigned short pcOldElse = code->size();
+  code->push_back(0);
+  // generate then
+  thenBranch->generate(code, table);
+  int afterStatementAddr = code->allocate();
+  code->addLoad(afterStatementAddr);
+  // jump to end of statement
+  unsigned short pcOldEnd = code->size();
+  code->push_back(0);
+  // delta = pc_from - pc_to
+  code->initStatic(elseBranchAddr, pcOldElse - (unsigned short) code->size());
+  // generate else
+  if(elseBranch != NULL)
+  	elseBranch->generate(code, table);
+  code->initStatic(afterStatementAddr, pcOldEnd - ((unsigned short) code->size()));
 }

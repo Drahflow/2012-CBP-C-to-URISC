@@ -80,10 +80,11 @@ program: program global_variable_definition { $1->add($2); $$ = $1; }
   | global_variable_definition { $$ = new Program(@1.first_line); $$->add($1); parser_result = $$; }
   | function_definition {  $$ = new Program(@1.first_line);  $$->add($1); parser_result = $$; };
 
-global_variable_definition: variable_definition { $$ = $1; }
+global_variable_definition: variable_definition {($1)->setGlobal(); $$ = $1; }
   | type_definition NAME '=' '{' var_init_list '}' ';'
     { 
       IntArrayDef* a = new IntArrayDef(@$.first_line, $2);
+      a->setGlobal();
       a->initialize(*($5));
       delete $5;
       $$ = a;
@@ -91,6 +92,7 @@ global_variable_definition: variable_definition { $$ = $1; }
   | type_definition NAME '[' NUM ']' '=' '{' var_init_list '}' ';'
     {
       IntArrayDef* a = new IntArrayDef(@$.first_line, $2, $4);
+      a->setGlobal();
       a->initialize(*($8));
       delete $8;
       $$ = a; 

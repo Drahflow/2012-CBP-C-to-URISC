@@ -2,6 +2,8 @@
 #define NODE_H
 
 #include <string>
+#include "../utilityClasses/CodeContainer.h"
+#include "../utilityClasses/SymbolTable.h"
 
 #define NODE_INDENT_CHAR ' '
 #define NODE_INDENT_REPEAT 4
@@ -18,7 +20,9 @@ class Node
     
     // returns a human-readable description of this node and its subnodes
     virtual std::string explain(int indent_level = 0) = 0;
-    
+    // TODO make abstract
+    // method for code generation, override in subclasses
+    virtual void generate(CodeContainer* code, SymbolTable* table) { }
     virtual ~Node() { }
 
   protected:

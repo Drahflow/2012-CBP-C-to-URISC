@@ -5,9 +5,6 @@
 #include <assert.h>
 #include "CodeContainer.h"
 
-// address the program is loaded at
-#define PROGRAM_OFFSET 0x1
-
 int& CodeContainer::operator[](int const& index)
 {
 	return codeContainer[index];

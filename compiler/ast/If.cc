@@ -44,19 +44,19 @@ void If::generate(CodeContainer* code, SymbolTable* table)
   // is skipped for *memExprResult != 0
   code->push_back(minOneAddr);
   // jump to else branch
-  unsigned short pcOldElse = code->size();
+  unsigned short pcOldElse = code->address();
   code->push_back(0);
   // generate then
   thenBranch->generate(code, table);
   int afterStatementAddr = code->allocate();
   code->addLoad(afterStatementAddr);
   // jump to end of statement
-  unsigned short pcOldEnd = code->size();
+  unsigned short pcOldEnd = code->address();
   code->push_back(0);
   // delta = pc_from - pc_to
-  code->initStatic(elseBranchAddr, pcOldElse - (unsigned short) code->size());
+  code->initStatic(elseBranchAddr, pcOldElse - (unsigned short) code->address());
   // generate else
   if(elseBranch != NULL)
   	elseBranch->generate(code, table);
-  code->initStatic(afterStatementAddr, pcOldEnd - ((unsigned short) code->size()));
+  code->initStatic(afterStatementAddr, pcOldEnd - ((unsigned short) code->address()));
 }

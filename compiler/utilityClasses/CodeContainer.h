@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+// address the program is loaded at
+#define PROGRAM_OFFSET 0x1
 
 class CodeContainer
 {
@@ -19,6 +21,9 @@ class CodeContainer
 	int& operator[](int const& index);
 	void addNOP();
 	void addClearAkk();
+	
+	// returns the address of the last inserted instruction + 1, program offset already considered
+	unsigned short address() { return codeContainer.size() + PROGRAM_OFFSET; }
 	
 	// loads *addr into acc
 	void addLoad(int addr);

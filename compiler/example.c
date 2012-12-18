@@ -2,7 +2,7 @@
  * shortened sample program for parser testing, with data omitted
  */
 
-int foo = 3;
+int foo = {3};
 
 int data[3] = { 42, 1337, 23 /* , ... */ };
 

@@ -35,5 +35,8 @@
 #include "ast/FunctionDef.h"
 #include "ast/FunctionCall.h"
 #include "ast/Assignment.h"
+#include "ast/IndirectionAssignment.h"
+#include "ast/Indirection.h"
+#include "ast/ArraySubscript.h"
 
 #endif

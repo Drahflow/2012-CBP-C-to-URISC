@@ -144,7 +144,7 @@ ifclause: IF '(' expression ')' { $$ = $3; };
 expression: 
     NAME '=' expression       { $$ = new Assignment(@$.first_line,$1,$3);}
   | NAME '(' values ')'       { $$ = new FunctionCall(@$.first_line,$1,$3);}
-  | '*' expression '=' expression
+  | '*' expression '=' expression{$$=new IndirectionAssignment(@$.first_line,$2,$4);}
   | expression '+' expression { $$ = new Addition(@$.first_line, $1,$3);}
   | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}
   | expression '*' expression { $$ = new Multiplication(@$.first_line, $1, $3);}
@@ -160,8 +160,8 @@ expression:
   | '(' expression ')'        { $$ = $2;}
   | '!' expression            { $$ = new Not(@$.first_line, $2);}
   | NAME                      { $$ = new ExpressionName(@$.first_line,$1);}
-  | NAME '[' expression ']'
-  | '*' expression
+  | NAME '[' expression ']'   { $$ = new ArraySubscript(@$.first_line,$1,$3);}
+  | '*' expression            { $$ = new Indirection(@$.first_line,$2);}
   | NUM                       { $$ = new ExpressionNum(@$.first_line,$1);}
   | '-' NUM                   { $$ = new Negate(@$.first_line,$2); }
   ;

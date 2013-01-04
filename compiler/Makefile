@@ -3,16 +3,18 @@ EXCL=simple_c.tab.cc simple_c.lex.cc
 
 OBJ=simple_c.tab.o simple_c.lex.o $(patsubst %.cc, %.o, $(filter-out $(EXCL), $(SRC)))
 
+CXXFLAGS=-W -Wall -Wextra -ggdb
+
 all: compiler
 
 compiler: $(OBJ)
-	g++ $(OBJ) -o compiler
+	g++ $(CXXFLAGS) $(OBJ) -o compiler
 
 -include $(OBJ:%.o=%.d)
 
 %.o: %.cc
-	g++ -c $*.cc -o $*.o
-	g++ -MM $*.cc > $*.d
+	g++ $(CXXFLAGS) -c $*.cc -o $*.o
+	g++ $(CXXFLAGS) -MM $*.cc > $*.d
 
 simple_c.tab.cc: simple_c.y
 	bison -d simple_c.y -o simple_c.tab.cc

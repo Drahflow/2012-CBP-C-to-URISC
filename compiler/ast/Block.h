@@ -20,6 +20,8 @@ class Block : public Command
       : Command(line), variables(0), commands(0) { }
 
     std::string explain(int);
+
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 #endif

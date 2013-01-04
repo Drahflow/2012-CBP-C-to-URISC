@@ -2,14 +2,36 @@
 #include <sstream>
 #include "Indirection.h"
 
-using std::endl;
+using namespace std;
 
-std::string Indirection::explain(int ind)
+string Indirection::explain(int ind)
 {
-  std::stringstream expl;
+  stringstream expl;
   expl << indent(ind) << "Indirection:" << endl;
   expl << indent(ind) << "-expression:" << endl;
-  expl << augend->explain(ind + 1);
+  expl << expr->explain(ind + 1);
   return expl.str();
 }
 
+void Indirection::generate(CodeContainer *code, SymbolTable *symbols) {
+  expr->generate(code, symbols);
+
+  int addr = code->address();
+  code->addComment("indirect memory access");
+  code->push_back(code->clearAddr);
+  code->push_back(code->clearAddr);
+  code->push_back(code->clearAddr); // clear = acc = 0
+  code->push_back(addr + 12);
+  code->push_back(addr + 12); // code = 0
+  code->push_back(code->exprResultAddr); // acc = expr
+  code->push_back(code->clearAddr); // clear = acc = -expr
+  code->push_back(code->clearAddr); // skipped (or expr == 0)
+  code->push_back(addr + 12); // code = acc = expr
+  code->push_back(code->exprResultAddr); // acc = expr = 0
+  code->push_back(code->clearAddr);
+  code->push_back(code->clearAddr); // clear = acc = 0
+  code->push_back(0xEEEE); // self modified // acc = *(original expr)
+  code->push_back(code->clearAddr); // clear = acc = -*(original expr)
+  code->push_back(code->clearAddr); // skipped (or *(original expr) == 0)
+  code->push_back(code->exprResultAddr); // expr = acc = --*(original expr)
+}

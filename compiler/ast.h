@@ -20,7 +20,6 @@
 #include "ast/And.h"
 #include "ast/Or.h"
 #include "ast/Not.h"
-#include "ast/Negate.h"
 #include "ast/ExpressionNum.h"
 #include "ast/ExpressionName.h"
 #include "ast/For.h"

@@ -21,6 +21,8 @@ class FunctionDef : public Node {
     Type getType() { return type; }
 
     std::string explain(int ind);
+
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 

@@ -19,3 +19,10 @@ std::string FunctionDef::explain(int ind)
   expl << block->explain(ind + 1);
   return expl.str();
 }
+
+void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
+  code->addComment("=== Function: " + name + " ===");
+  // TODO: enter parameters into symbol table
+  // TODO: collect local variables from blocks into symbol table
+  block->generate(code, symbols);
+}

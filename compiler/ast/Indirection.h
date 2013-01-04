@@ -5,12 +5,16 @@
 #include "Expression.h"
 #include "Command.h"
 
-class Indirection: public Expression
-{
-	public:
-	Expression * augend;
-	Indirection(int line, Expression *e) : Expression(line) { augend = e; }
-	std::string explain(int ind);
+class Indirection: public Expression {
+  private:
+    Expression *expr;
+
+  public:
+    Indirection(int line, Expression *expr)
+      : Expression(line), expr(expr) { }
+
+    std::string explain(int indent);
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 #endif //INDIRECTION_H

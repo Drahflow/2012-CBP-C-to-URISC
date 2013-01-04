@@ -15,3 +15,10 @@ string Block::explain(int ind) {
   if(commands) explainSubitems(expl, ind + 1, *commands);
   return expl.str();
 }
+
+void Block::generate(CodeContainer *code, SymbolTable *symbols) {
+  for(vector<Command *>::const_iterator i = commands->begin(); i != commands->end(); ++i) {
+    // code->addComment((*i)->explain(0)); // does not work in reality, because of \n
+    (*i)->generate(code, symbols);
+  }
+}

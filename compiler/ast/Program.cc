@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
 #include "Program.h"
 
 using std::stringstream;
@@ -21,7 +22,12 @@ std::string Program::explain(int ind)
 }
 
 void Program::codeGeneration1(CodeContainer *codeContainer, SymbolTable *symbolTable) {
-	codeContainer->addClearAkk();
+  codeContainer->addComment("===== program starts here =====");
+  codeContainer->addClearAkk();
+
+  for(vector<Node *>::const_iterator i = definitions.begin(); i != definitions.end(); ++i) {
+    (*i)->generate(codeContainer, symbolTable);
+  }
 }
 
 void Program::codeGeneration2(CodeContainer *codeContainer, SymbolTable *symbolTable) {

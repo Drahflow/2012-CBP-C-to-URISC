@@ -27,8 +27,8 @@ class Node
     }
 
     // method for code generation, override in subclasses
-    virtual void generate(CodeContainer*, SymbolTable*) {
-      throw std::runtime_error(std::string("TODO missing generate(...) in class: ") + typeid(*this).name());
+    virtual void generate(CodeContainer *code, SymbolTable *) {
+      code->addComment(std::string("TODO missing generate(...) in class: ") + typeid(*this).name());
     }
     virtual ~Node() { }
 

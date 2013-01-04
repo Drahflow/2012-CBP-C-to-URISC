@@ -7,10 +7,15 @@
 
 class ExpressionNum: public Expression
 {
-	public:
-	int num_;
-	ExpressionNum(int line, int num) : Expression(line) { num_ = num;}
-	std::string explain(int ind);
+  private:
+    int num;
+
+  public:
+    ExpressionNum(int line, int num)
+      : Expression(line), num(num) { }
+
+    std::string explain(int);
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 #endif //EXPRESSIONNUM_H

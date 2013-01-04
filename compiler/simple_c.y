@@ -169,7 +169,7 @@ expression:
   | NAME '[' expression ']'   { $$ = new ArraySubscript(@$.first_line,$1,$3);}
   | '*' expression            { $$ = new Indirection(@$.first_line,$2);}
   | NUM                       { $$ = new ExpressionNum(@$.first_line,$1);}
-  | '-' NUM                   { $$ = new Negate(@$.first_line,$2); }
+  | '-' NUM                   { $$ = new ExpressionNum(@$.first_line, -$2); }
   ;
 
 values: { $$ = new std::vector<Expression *>(); } 

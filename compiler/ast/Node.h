@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include <string>
+#include <typeinfo>
 #include "../utilityClasses/CodeContainer.h"
 #include "../utilityClasses/SymbolTable.h"
 
@@ -19,7 +20,10 @@ class Node
     int getLine() { return line; }
     
     // returns a human-readable description of this node and its subnodes
-    virtual std::string explain(int indent_level = 0) = 0;
+    virtual std::string explain(int indent_level = 0) {
+      return indent(indent_level) + "TODO explain(int) missing in subclass: " + typeid(*this).name() + "\n";
+    }
+
     // TODO make abstract
     // method for code generation, override in subclasses
     virtual void generate(CodeContainer* code, SymbolTable* table) { }

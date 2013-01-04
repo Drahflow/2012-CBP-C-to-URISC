@@ -21,6 +21,7 @@
   VariableDef*			var_def;
   std::vector<int>*		int_list;
   std::vector<Command*>*	command_list;
+  std::vector<VariableDef*>*    var_def_list;
   Command*			command;
   Type				type;
   Expression*			expression;
@@ -35,7 +36,8 @@
 %}
 
 %type <prog> program;
-%type <var_def> global_variable_definition variable_definition 
+%type <var_def> global_variable_definition variable_definition parameter
+%type <var_def_list> variable_definitions parameter_list parameters
 %type <int_list> var_init_list
 %type <type> type_definition
 %type <command_list> commands
@@ -105,28 +107,32 @@ variable_definition:
   type_definition NAME ';' { $$ = new VariableDef(@$.first_line, $1, $2); };
 
 function_definition:
-  type_definition NAME '(' parameter_list ')' block { $$ = new FunctionDef(@$.first_line, $1, $2, $6); };
+  type_definition NAME '(' parameter_list ')' block { $$ = new FunctionDef(@$.first_line, $1, $2, $4, $6); };
 
 // function_type_definition: VOID | INT;
 
 type_definition: INT { $$ = TYPE_INT; };
 
-parameter_list: VOID
-  | parameters;
+parameter_list: VOID { $$ = new std::vector<VariableDef *>(); }
+              | parameters { $$ = $1 }
+              ;
 
-parameters: parameter
-  | parameters ',' parameter;
+parameters: parameter { $$ = new std::vector<VariableDef *>(); $$->push_back($1); }
+          | parameters ',' parameter { $1->push_back($3); $$ = $1; }
+          ;
   
-parameter: type_definition NAME;
+parameter: type_definition NAME { $$ = new VariableDef(@$.first_line, $1, $2); }
+         ;
 
 block: ';' { $$ = new Block(@$.first_line); } 
-  | '{' variable_definitions commands '}' { /* $$ = new Block(@$.first_line, $3, $2); delete $2; delete $3; */ } 
-  | '{' commands '}' { $$ = new Block(@$.first_line, *($2)); delete $2; }
+  | '{' variable_definitions commands '}' { $$ = new Block(@$.first_line, $3, $2); } 
+  | '{' commands '}' { $$ = new Block(@$.first_line, $2); }
   | '{' '}' { $$ = new Block(@$.first_line); }
   ;
 
-variable_definitions: variable_definitions variable_definition
-  | variable_definition;
+variable_definitions: variable_definitions variable_definition { $1->push_back($2); $$ = $1; }
+  | variable_definition { $$ = new std::vector<VariableDef *>(); $$->push_back($1); }
+  ;
 
 commands: commands command { $$ = $1; $1->push_back($2);  }
   | command { $$ = new std::vector<Command*>(); $$->push_back($1); };
@@ -166,7 +172,7 @@ expression:
   | '-' NUM                   { $$ = new Negate(@$.first_line,$2); }
   ;
 
-values: /* no function arguments */
+values: { $$ = new std::vector<Expression *>(); } 
   | values ',' expression { $$ = $1; $1->push_back($3); }
   | expression            { $$ = new std::vector<Expression*>(); $$->push_back($1);}
   ;

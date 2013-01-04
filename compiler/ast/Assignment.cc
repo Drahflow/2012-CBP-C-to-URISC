@@ -11,7 +11,7 @@ std::string Assignment::explain(int ind)
   expl << indent(ind) << "-expression:" << endl;
   expl << augend->explain(ind + 1);
   expl << indent(ind) << "-to NAME:" << endl;
-  expl << name_;
+  expl << indent(ind + 1) << name_ << endl;
   return expl.str();
 }
 

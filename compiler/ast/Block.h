@@ -15,8 +15,11 @@ class Block : public Command
     Block(int line, std::vector<Command*> *commands, std::vector<VariableDef*> *vars) 
       : Command(line), variables(vars), commands(commands) { }
     Block(int line, std::vector<Command*> *commands) 
-      : Command(line), commands(commands) { }
-    Block(int line) : Command(line) { }
+      : Command(line), variables(0), commands(commands) { }
+    Block(int line)
+      : Command(line), variables(0), commands(0) { }
+
+    std::string explain(int);
 };
 
 #endif

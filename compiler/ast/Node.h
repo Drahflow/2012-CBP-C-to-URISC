@@ -3,6 +3,8 @@
 
 #include <string>
 #include <typeinfo>
+#include <stdexcept>
+
 #include "../utilityClasses/CodeContainer.h"
 #include "../utilityClasses/SymbolTable.h"
 
@@ -24,9 +26,10 @@ class Node
       return indent(indent_level) + "TODO explain(int) missing in subclass: " + typeid(*this).name() + "\n";
     }
 
-    // TODO make abstract
     // method for code generation, override in subclasses
-    virtual void generate(CodeContainer* code, SymbolTable* table) { }
+    virtual void generate(CodeContainer*, SymbolTable*) {
+      throw std::runtime_error(std::string("TODO missing generate(...) in class: ") + typeid(*this).name());
+    }
     virtual ~Node() { }
 
   protected:

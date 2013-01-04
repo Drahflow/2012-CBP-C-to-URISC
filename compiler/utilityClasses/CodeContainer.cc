@@ -43,7 +43,7 @@ int CodeContainer::allocate(unsigned short value)
 
 void CodeContainer::initStatic(int addr, unsigned short value)
 {
-	int index = -addr - 1;
+	size_t index = -addr - 1;
 	assert(staticValues.size() > index);
 	staticValues[index] = value;
 }
@@ -73,7 +73,7 @@ std::string CodeContainer::getCodeString(void) {
 		else
 		{
 			 // check if we've actually allocated the address
-			int offset = -instr - 1;
+			size_t offset = -instr - 1;
 			assert(staticValues.size() > offset);
 			returnValue << codeContainer.size() + offset + PROGRAM_OFFSET;
 		}

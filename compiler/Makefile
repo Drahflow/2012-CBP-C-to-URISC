@@ -3,7 +3,7 @@ EXCL=simple_c.tab.cc simple_c.lex.cc
 
 OBJ=simple_c.tab.o simple_c.lex.o $(patsubst %.cc, %.o, $(filter-out $(EXCL), $(SRC)))
 
-CXXFLAGS=-W -Wall -Wextra -ggdb
+CXXFLAGS=-W -Wall -Wextra -Wno-unused-function -ggdb
 
 all: compiler
 

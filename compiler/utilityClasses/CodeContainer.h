@@ -6,7 +6,7 @@
 #include <iostream>
 
 // address the program is loaded at
-#define PROGRAM_OFFSET 0x1
+#define PROGRAM_OFFSET 0x2
 
 class CodeContainer
 {

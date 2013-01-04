@@ -59,11 +59,11 @@ int CodeContainer::size()
 	return codeContainer.size();
 }
 
-using std::ostringstream;
+using namespace std;
 
-std::string CodeContainer::getCodeString(void) {
-	std::stringstream returnValue;
-	for (std::vector<int>::iterator it = codeContainer.begin() ; it != codeContainer.end(); ++it) {
+string CodeContainer::getCodeString(void) {
+	stringstream returnValue;
+	for (vector<int>::iterator it = codeContainer.begin() ; it != codeContainer.end(); ++it) {
 		// returnValue << *it;
 		int instr = *it;
 		if(instr >= 0)
@@ -82,7 +82,7 @@ std::string CodeContainer::getCodeString(void) {
 		//returnValue += "\n";
 	}
 	// write default values
-	for(std::vector<unsigned short>::iterator it = staticValues.begin(); it != staticValues.end(); ++it)
+	for(vector<unsigned short>::iterator it = staticValues.begin(); it != staticValues.end(); ++it)
 	{
 		returnValue << *it;
 		returnValue << "\n";

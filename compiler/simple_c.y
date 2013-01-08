@@ -114,7 +114,7 @@ function_definition:
 type_definition: INT { $$ = TYPE_INT; };
 
 parameter_list: VOID { $$ = new std::vector<VariableDef *>(); }
-              | parameters { $$ = $1 }
+              | parameters { $$ = $1; }
               ;
 
 parameters: parameter { $$ = new std::vector<VariableDef *>(); $$->push_back($1); }

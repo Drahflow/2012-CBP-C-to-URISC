@@ -4,6 +4,9 @@
 
 using std::endl;
 
+int If::zeroAddr = 0;
+int If::minOneAddr = 0;
+
 std::string If::explain(int ind)
 {
   std::stringstream expl;
@@ -18,10 +21,10 @@ std::string If::explain(int ind)
 
 void If::allocateStatic(CodeContainer* code)
 {
-	if(zeroAddr < 0 && minOneAddr < 0)
+	if(If::zeroAddr < 0 && If::minOneAddr < 0)
 		return;
-    zeroAddr = code->allocate(0);
-    minOneAddr = code->allocate(0xFFFF); // -1 mod 2^16
+    If::zeroAddr = code->allocate(0);
+    If::minOneAddr = code->allocate(0xFFFF); // -1 mod 2^16
 }
 
 void If::generate(CodeContainer* code, SymbolTable* table)
@@ -33,8 +36,8 @@ void If::generate(CodeContainer* code, SymbolTable* table)
   // generate code for condition expression
   condition->generate(code, table);
   code->addClear(zeroAddr);
-  // TODO get the address of the condition value
-  int memExprResult = 0xdeadbeef;
+  // the address of the condition value
+  int memExprResult = code->exprResultAddr;
   code->addLoad(memExprResult);
   // compute 0 - *memExprResult for conditional jump
   code->push_back(zeroAddr);

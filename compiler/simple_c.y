@@ -166,7 +166,9 @@ expression:
   | '(' expression ')'        { $$ = $2;}
   | '!' expression            { $$ = new Not(@$.first_line, $2);}
   | NAME                      { $$ = new ExpressionName(@$.first_line,$1);}
-  | NAME '[' expression ']'   { $$ = new ArraySubscript(@$.first_line,$1,$3);}
+  | NAME '[' expression ']'   {
+    $$ = new Indirection(@$.first_line, new Addition(@$.first_line, new ExpressionName(@$.first_line, $1), $3));
+  }
   | '*' expression            { $$ = new Indirection(@$.first_line,$2);}
   | NUM                       { $$ = new ExpressionNum(@$.first_line,$1);}
   | '-' NUM                   { $$ = new ExpressionNum(@$.first_line, -$2); }

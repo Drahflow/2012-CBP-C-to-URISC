@@ -13,3 +13,8 @@ std::string VariableDef::explain(int ind)
   expl << " " << name << "," << type_name(type) << endl;
   return expl.str();
 }
+
+void VariableDef::generate(CodeContainer *code, SymbolTable *symbols) {
+  int addr = code->allocate();
+  symbols->addVariable(getName(), addr, global);
+}

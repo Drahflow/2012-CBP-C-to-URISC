@@ -7,9 +7,11 @@
 
 class VariableDef : public Node
 {
-  Type type;
-  std::string name;
-  bool global;
+  protected:
+    Type type;
+    std::string name;
+    bool global;
+
   public:
     VariableDef(int line, Type type, char* name) : Node(line), type(type), name(std::string(name)), global(false) { }
     std::string getName() { return name; }
@@ -17,6 +19,7 @@ class VariableDef : public Node
     std::string explain(int ind);
     // call if definition is global/static
     void setGlobal() { global = true; }
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 

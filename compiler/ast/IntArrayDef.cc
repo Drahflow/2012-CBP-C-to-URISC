@@ -12,3 +12,7 @@ std::string IntArrayDef::explain(int ind)
   expl << " size=" << size << " " << "#data=" << data.size() << endl;
   return expl.str();
 }
+
+void IntArrayDef::generate(CodeContainer *code, SymbolTable *symbols) {
+  VariableDef::generate(code, symbols);
+}

@@ -1,16 +1,19 @@
 #ifndef EXPRESSIONNAME_H
 #define EXPRESSIONNAME_H
 
-#include <string>
 #include "Expression.h"
 #include "Command.h"
 
-class ExpressionName: public Expression
-{
-	public:
-	char *name_;
-	ExpressionName(int line, char* name) : Expression(line) { name_ = name;}
-	std::string explain(int ind);
+#include <string>
+
+class ExpressionName: public Expression {
+  private:
+    const std::string name;
+
+  public:
+    ExpressionName(int line, char* name): Expression(line), name(name) { }
+    std::string explain(int ind);
+    void generate(CodeContainer *, SymbolTable *);
 };
 
 #endif //EXPRESSIONNAME_H

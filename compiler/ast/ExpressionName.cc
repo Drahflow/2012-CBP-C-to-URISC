@@ -27,5 +27,6 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(code->exprResultAddr);
   } else {
     code->addComment("TODO local variables not yet implemented as stack layout is unspecified");
+    code->push_back(var.addr);
   }
 }

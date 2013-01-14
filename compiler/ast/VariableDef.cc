@@ -14,7 +14,17 @@ std::string VariableDef::explain(int ind)
   return expl.str();
 }
 
+void VariableDef::setLocalAddr(int a) {
+  if(global) throw std::logic_error("Local addr set for global variable");
+  addr = a;
+}
+
 void VariableDef::generate(CodeContainer *code, SymbolTable *symbols) {
-  int addr = code->allocate();
+  if(global) {
+    addr = code->allocate();
+  } else if(addr == 0xFFFF) {
+    throw std::logic_error("code generation of unplaced local variable");
+  }
+
   symbols->addVariable(getName(), addr, global);
 }

@@ -26,7 +26,31 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(code->clearAddr);
     code->push_back(code->exprResultAddr);
   } else {
-    code->addComment("TODO local variables not yet implemented as stack layout is unspecified");
-    code->push_back(var.addr);
+    code->addClear(code->exprResultAddr);
+    code->push_back(code->allocate(var.addr));
+    code->push_back(code->exprResultAddr); // expr = -addr
+    code->addLoad(code->stackPointerAddr);
+    code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr);
+    code->push_back(code->exprResultAddr); // expr = stack pointer - addr
+
+    int addr = code->address();
+    code->addComment("indirect memory access");
+    code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr); // clear = acc = 0
+    code->push_back(addr + 12);
+    code->push_back(addr + 12); // code = 0
+    code->push_back(code->exprResultAddr); // acc = expr
+    code->push_back(code->clearAddr); // clear = acc = -expr
+    code->push_back(code->clearAddr); // skipped (or expr == 0)
+    code->push_back(addr + 12); // code = acc = expr
+    code->push_back(code->exprResultAddr); // acc = expr = 0
+    code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr); // clear = acc = 0
+    code->push_back(0xEEEE); // self modified // acc = *(original expr)
+    code->push_back(code->clearAddr); // clear = acc = -*(original expr)
+    code->push_back(code->clearAddr); // skipped (or *(original expr) == 0)
+    code->push_back(code->exprResultAddr); // expr = acc = --*(original expr)
   }
 }

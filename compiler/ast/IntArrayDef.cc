@@ -19,31 +19,20 @@ void IntArrayDef::generate(CodeContainer *code, SymbolTable *symbols)
 	assert(global);
 	assert(size >= (int) data.size());
   	
-  	int headAddr = 0xFFFF;
-  	if(size > 0)
-  	{
-	  	// allocate first element
-		headAddr = code->allocate();
-		
-		// allocate remaining elements
-		int prevAddr = headAddr;
-		for(int i = 1; i < size; i++)
-		{
-			int nextAddr = code->allocate();
-			// ensure this is contiguous
-			assert(prevAddr + 1 == nextAddr);
-			prevAddr = nextAddr;
-		}
-	}
-	
-	// initialize values
-	if(data.size() > 0)
-	{
-		int currentAddr = headAddr;
-		for(vector<int>::iterator it = data.begin(); it != data.end(); ++it)
-			code->initStatic(currentAddr++, *it);
-	}
-	
+        // allocate first element
+        int headAddr = code->allocate();
+        int addr = headAddr;
+        int i = 0;
+        while(1) {
+          code->initStatic(addr, data[i]);
+          if(++i >= size) break;
+
+          int prevAddr = addr;
+          addr = code->allocate();
+          // ensure this is contiguous
+          assert(prevAddr - 1 == addr);
+        }
+
 	// allocate pointer
 	int pointerAddr = code->allocate(headAddr);
 	

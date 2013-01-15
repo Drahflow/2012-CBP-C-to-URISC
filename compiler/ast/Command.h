@@ -8,6 +8,8 @@ class Command : public Node
 {
   public:
     Command(int line) : Node(line) { }
+
+    virtual int getLocalVariableCount() const { return 0; }
 };
 
 #endif

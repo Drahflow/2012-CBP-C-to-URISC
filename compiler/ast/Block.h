@@ -22,6 +22,7 @@ class Block : public Command
     std::string explain(int);
 
     void generate(CodeContainer *, SymbolTable *);
+    int getLocalVariableCount() const;
 };
 
 #endif

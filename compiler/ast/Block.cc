@@ -35,3 +35,15 @@ void Block::generate(CodeContainer *code, SymbolTable *symbols) {
     (*i)->generate(code, localScope);
   }
 }
+
+int Block::getLocalVariableCount() const {
+  int direct = variables? variables->size(): 0;
+  int indirect = 0;
+
+  for(vector<Command *>::const_iterator i = commands->begin(); i != commands->end(); ++i) {
+    const int localVars = (*i)->getLocalVariableCount();
+    if(localVars > indirect) indirect = localVars;
+  }
+
+  return direct + indirect;
+}

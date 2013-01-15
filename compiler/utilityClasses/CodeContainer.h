@@ -27,8 +27,9 @@ class CodeContainer
         // address of expression result
         const int exprResultAddr;
 
-        CodeContainer()
-          : clearAddr(0x7FFF), exprResultAddr(0x7FFE) { }
+        // address of expression result
+        const int stackPointerAddr;
+
         void push_back(int code);
         void addComment(const std::string &);
         int size();
@@ -54,6 +55,9 @@ class CodeContainer
         // clears memory and acc at addr
         void addClear(int addr);
         std::string getCodeString(void); 
+
+        CodeContainer()
+          : clearAddr(0x7FFF), exprResultAddr(0x7FFE), stackPointerAddr(allocate(0x7FFD)) { }
 };
 
 #endif //CODECONTAINER_H

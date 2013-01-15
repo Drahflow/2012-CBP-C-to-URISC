@@ -15,7 +15,7 @@ class IntArrayDef : public VariableDef
     void initialize(const std::vector<int>& data)
     {
       this->data = data;
-      if(size < 0)
+      //if(size < 0)
         size = data.size();
       // else
     }

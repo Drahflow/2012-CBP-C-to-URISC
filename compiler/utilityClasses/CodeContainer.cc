@@ -19,6 +19,13 @@ void CodeContainer::addComment(const std::string &comment) {
         }
 }
 
+void CodeContainer::setInstruction(int position, int code)
+{
+		Instruction instr;
+		instr.code = code;
+		codeContainer[position] = instr;
+}
+
 void CodeContainer::push_back(int code)
 {
         Instruction instr;
@@ -108,6 +115,7 @@ void CodeContainer::addStackPush( int addr )
 
 	Instruction instr;
 	instr.code = oneAddr;
+	//code[pos] = instr; //write address of the 1 to the codeContainer
 	codeContainer[pos] = instr; //write address of the 1 to the codeContainer
 	
 }

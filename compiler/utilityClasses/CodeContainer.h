@@ -39,6 +39,8 @@ class CodeContainer
         int& operator[](int const& index);
         void addNOP();
         void addClearAkk();
+
+		void setInstruction(int position, int code);
         
         // returns the address of the last inserted instruction + 1, program offset already considered
         unsigned short address() { return codeContainer.size() + PROGRAM_OFFSET; }
@@ -63,7 +65,7 @@ class CodeContainer
         std::string getCodeString(void); 
 
         CodeContainer()
-          : clearAddr(0x7FFF), exprResultAddr(0x7FFE), tempAddr(0x7FFC), stackPointerAddr(allocate(0x7FFD)) { }
+          : clearAddr(0x7FFF), exprResultAddr(0x7FFE), tempAddr(0x7FFD), stackPointerAddr(allocate(0x7FFC)) { }
 };
 
 #endif //CODECONTAINER_H

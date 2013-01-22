@@ -15,3 +15,17 @@ std::string Subtraction::explain(int ind)
   return expl.str();
 }
 
+void Subtraction::generate(CodeContainer* code, SymbolTable* table)
+{
+	addend->generate(code, table);
+	code->addStackPush(code->exprResultAddr);
+	augend->generate(code, table);
+	code->push_back(code->clearAddr);
+	code->push_back(code->clearAddr);
+	code->push_back(code->clearAddr);
+	code->addStackPop(code->tempAddr);
+	code->addClearAkk();
+	code->push_back(code->tempAddr);
+	code->push_back(code->exprResultAddr);
+	code->addNOP();
+}

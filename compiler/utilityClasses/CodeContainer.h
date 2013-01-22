@@ -43,8 +43,9 @@ class CodeContainer
         // loads *addr into acc
         void addLoad(int addr);
 
-        // pushes *addr to the stack
+        // pushes and pops *addr to the stack
         void addStackPush( int addr);
+        void addStackPop( int addr);
         /* 
          * allocates a new static address after the program code,
          * initializes it to value and returns the temporary address (< 0)

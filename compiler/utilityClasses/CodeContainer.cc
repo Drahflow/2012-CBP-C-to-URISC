@@ -66,6 +66,77 @@ void CodeContainer::addLoad(int addr)
 	push_back(addr);
 }
 
+void CodeContainer::addStackPush( int addr )
+{
+	addClearAkk();
+	int localAddr = address();
+	push_back(localAddr + 15);
+	push_back(localAddr + 15);
+	push_back(localAddr + 15);
+	push_back(stackPointerAddr);
+	push_back(localAddr + 15);
+	push_back(localAddr + 16);
+	push_back(localAddr + 16);
+	push_back(localAddr + 16);
+	push_back(stackPointerAddr);
+	push_back(localAddr + 16);
+	push_back(localAddr + 17);
+	push_back(localAddr + 17);
+	push_back(localAddr + 17);
+	push_back(stackPointerAddr);
+	push_back(localAddr + 17);
+	push_back(0); // get overwritten to clear stackaddress
+	push_back(0);
+	push_back(0);
+	localAddr = address();
+	push_back(localAddr + 8);
+	push_back(localAddr + 8);
+	push_back(localAddr + 8);
+	push_back(stackPointerAddr);
+	push_back(localAddr + 8);
+	push_back(addr); // load address
+	push_back(clearAddr); // store -(*addr) in akk and borrow
+	push_back(1); // skip, use the 1 later
+	int oneAddr = localAddr + 7;
+	push_back(0); // store *addr at the stack pointer position
+	// change stack pointer value by -1
+	addClearAkk();
+	push_back(oneAddr); // put 1 to akk
+	push_back(stackPointerAddr); // stackPointer = stackPointer - 1
+	
+}
+
+void CodeContainer::addStackPop( int addr )
+{
+	addClear(addr);
+	addClear(clearAddr);
+	push_back(clearAddr); //store -(*stackPointerAddr)
+	push_back(clearAddr); // skip
+	int localAddr = address();
+	push_back(localAddr + 7);
+    push_back(localAddr + 7);
+	push_back(localAddr + 7);
+	push_back(stackPointerAddr);
+	push_back(localAddr + 7); //load stack pointer to specified position
+	push_back(clearAddr);
+	push_back(clearAddr);
+	push_back(clearAddr);
+	push_back(0); // load value from stack to akk
+	push_back(clearAddr); // store -value to clearAddr
+	int oneAddr = address();
+	push_back(1); //skip
+	push_back(addr); // store stack value to addr
+
+	// change stack pointer by +1
+	push_back(clearAddr);
+	push_back(clearAddr);
+	push_back(clearAddr);
+	push_back(oneAddr); // load one to akk
+	push_back(clearAddr); // (0-1)
+	push_back(1); // skip
+	push_back(stackPointerAddr); // (*stackPointerAddr) + 1
+}
+
 int CodeContainer::size()
 {
 	return codeContainer.size();

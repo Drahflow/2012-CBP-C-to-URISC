@@ -15,3 +15,6 @@ std::string FunctionCall::explain(int ind)
   return expl.str();
 }
 
+void FunctionCall::generate(CodeContainer*, SymbolTable*)
+{
+}

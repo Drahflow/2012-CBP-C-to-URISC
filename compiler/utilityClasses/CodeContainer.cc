@@ -69,6 +69,12 @@ void CodeContainer::addLoad(int addr)
 void CodeContainer::addStackPush( int addr )
 {
 	addClearAkk();
+	// change stack pointer value by -1
+	addClearAkk();
+	int pos = size();
+	push_back(0); // put 1 to akk
+	push_back(stackPointerAddr); // stackPointer = stackPointer - 1
+	addClearAkk();
 	int localAddr = address();
 	push_back(localAddr + 15);
 	push_back(localAddr + 15);
@@ -99,15 +105,25 @@ void CodeContainer::addStackPush( int addr )
 	push_back(1); // skip, use the 1 later
 	int oneAddr = localAddr + 7;
 	push_back(0); // store *addr at the stack pointer position
-	// change stack pointer value by -1
-	addClearAkk();
-	push_back(oneAddr); // put 1 to akk
-	push_back(stackPointerAddr); // stackPointer = stackPointer - 1
+
+	Instruction instr;
+	instr.code = oneAddr;
+	codeContainer[pos] = instr; //write address of the 1 to the codeContainer
 	
 }
 
 void CodeContainer::addStackPop( int addr )
 {
+	// change stack pointer by +1
+	push_back(clearAddr);
+	push_back(clearAddr);
+	push_back(clearAddr);
+	int oneAddr = address()+2;
+	push_back(oneAddr); // load one to akk
+	push_back(clearAddr); // (0-1)
+	push_back(1); // skip
+	push_back(stackPointerAddr); // (*stackPointerAddr) + 1
+	// pop:
 	addClear(addr);
 	addClear(clearAddr);
 	push_back(clearAddr); //store -(*stackPointerAddr)
@@ -123,18 +139,9 @@ void CodeContainer::addStackPop( int addr )
 	push_back(clearAddr);
 	push_back(0); // load value from stack to akk
 	push_back(clearAddr); // store -value to clearAddr
-	int oneAddr = address();
 	push_back(1); //skip
 	push_back(addr); // store stack value to addr
 
-	// change stack pointer by +1
-	push_back(clearAddr);
-	push_back(clearAddr);
-	push_back(clearAddr);
-	push_back(oneAddr); // load one to akk
-	push_back(clearAddr); // (0-1)
-	push_back(1); // skip
-	push_back(stackPointerAddr); // (*stackPointerAddr) + 1
 }
 
 int CodeContainer::size()

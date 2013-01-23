@@ -21,14 +21,20 @@ std::string Program::explain(int ind)
   return expl.str();
 }
 
-void Program::codeGeneration1(CodeContainer *codeContainer, SymbolTable *symbolTable) {
-  codeContainer->addComment("===== program starts here =====");
-  codeContainer->addClearAkk();
+void Program::codeGeneration1(CodeContainer *code, SymbolTable *symbols) {
+  code->addComment("===== program starts here =====");
+  code->addComment("===== initial jump to main =====");
+  int jumpDelta = code->allocate();
+  code->addLoad(jumpDelta);
+  code->push_back(0);
+  int afterJumpAddr = code->address();
 
   for(vector<Node *>::const_iterator i = definitions.begin(); i != definitions.end(); ++i) {
-    (*i)->generate(codeContainer, symbolTable);
+    (*i)->generate(code, symbols);
   }
+
+  code->initStatic(jumpDelta, afterJumpAddr - symbols->resolveVariable("main").addr);
 }
 
-void Program::codeGeneration2(CodeContainer *codeContainer, SymbolTable *symbolTable) {
+void Program::codeGeneration2(CodeContainer *, SymbolTable *) {
 }

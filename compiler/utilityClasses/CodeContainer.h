@@ -24,11 +24,11 @@ class CodeContainer
         // address of clear dummy
         const int clearAddr;
 
-        // address of temp value
-        const int tempAddr;
-
         // address of expression result
         const int exprResultAddr;
+
+        // address of temp value
+        const int tempAddr;
 
         // address of expression result
         const int stackPointerAddr;

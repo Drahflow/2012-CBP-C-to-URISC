@@ -11,6 +11,7 @@ class Return : public Command
   public:
     Return(int line, Expression* value) : Command(line), value(value) { }
     std::string explain(int ind);
+    void generate(CodeContainer *code, SymbolTable * symbols);
 };
 
 #endif

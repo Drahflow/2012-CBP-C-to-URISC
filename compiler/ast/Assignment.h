@@ -12,6 +12,7 @@ class Assignment: public Expression
 	char* name_;
 	Assignment(int line, char* name, Expression *e) : Expression(line) { augend = e; name_ = name;}
 	std::string explain(int ind);
+	void generate(CodeContainer *code, SymbolTable *table);
 };
 
 #endif //ASSIGNMENT_H

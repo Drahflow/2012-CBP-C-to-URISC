@@ -12,6 +12,7 @@ class IndirectionAssignment: public Expression
 	Expression * augend;
 	IndirectionAssignment(int line, Expression * pointer, Expression *e) : Expression(line) { augend = e; pointer_ = pointer;}
 	std::string explain(int ind);
+	void generate(CodeContainer*, SymbolTable*);
 };
 
 #endif //INDIRECTIONASSIGNMENT_H

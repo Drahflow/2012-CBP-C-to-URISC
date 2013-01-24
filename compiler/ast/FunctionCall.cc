@@ -17,6 +17,7 @@ std::string FunctionCall::explain(int ind)
 
 void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 {
+	code->addComment("start functionCall");
 	SymbolTable::Variable functionVariable = symbols->resolveVariable( name_ );
 	int functionAddress = code->allocate( functionVariable.addr );
 	std::vector<Expression*>::reverse_iterator rit; // reverse iterator

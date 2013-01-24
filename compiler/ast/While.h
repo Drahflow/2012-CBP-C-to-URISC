@@ -11,7 +11,7 @@ class While : public Command, public WrapperCallback
   Expression* condition;
   Command* body;
   // stores memory for jump delta
-  unsigned short beginLoopAddr;
+  int beginLoopAddr;
   unsigned short pcBeginLoop;
   
   public:

@@ -11,6 +11,7 @@ class Not: public Expression
 	Expression * augend;
 	Not(int line, Expression *e1) : Expression(line) { augend = e1;}
 	std::string explain(int ind);
+	void generate(CodeContainer*, SymbolTable*);
 };
 
 #endif //NOT_H

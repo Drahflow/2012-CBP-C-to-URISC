@@ -1,6 +1,8 @@
 #include <string>
 #include <sstream>
 #include "GreaterOrEqual.h"
+#include "Greater.h"
+#include "Not.h"
 
 using std::endl;
 
@@ -15,3 +17,8 @@ std::string GreaterOrEqual::explain(int ind)
   return expl.str();
 }
 
+void GreaterOrEqual::generate(CodeContainer *code, SymbolTable *table) {
+	Greater *greater =  new Greater( 0, addend, augend );
+	Not *nott = new Not( 0, greater );
+	nott->generate( code, table );
+}

@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include "Less.h"
+#include "Greater.h"
 
 using std::endl;
 
@@ -15,3 +16,7 @@ std::string Less::explain(int ind)
   return expl.str();
 }
 
+void Less::generate(CodeContainer *code, SymbolTable *table) {
+	Greater *greater =  new Greater( 0, addend, augend );
+	greater->generate( code, table );
+}

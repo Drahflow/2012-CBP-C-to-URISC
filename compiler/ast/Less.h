@@ -12,6 +12,7 @@ class Less: public Expression
 	Expression * addend;
 	Less(int line, Expression *e1, Expression *e2) : Expression(line) { augend = e1; addend = e2;}
 	std::string explain(int ind);
+	void generate( CodeContainer*, SymbolTable*);
 };
 
 #endif //LESS_H

@@ -12,6 +12,7 @@ class Greater: public Expression
 	Expression * addend;
 	Greater(int line, Expression *e1, Expression *e2) : Expression(line) { augend = e1; addend = e2;}
 	std::string explain(int ind);
+	void generate( CodeContainer*, SymbolTable* );
 };
 
 #endif //GREATER_H

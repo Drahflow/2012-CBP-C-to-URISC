@@ -1,6 +1,10 @@
 #include <string>
 #include <sstream>
 #include "Equal.h"
+#include "Subtraction.h"
+#include "If.h"
+#include "CommandExprResult.h"
+#include "ExpressionNum.h"
 
 using std::endl;
 
@@ -15,3 +19,13 @@ std::string Equal::explain(int ind)
   return expl.str();
 }
 
+void Equal::generate(CodeContainer *code, SymbolTable *table)
+{
+// idea: (a == b) -> if(a-b) return 0; else return 1;
+	Expression *sub = new Subtraction( 0, augend, addend );
+	Command *one  = new CommandExprResult( 0, new ExpressionNum( 0, 1 ) );
+	Command *zero = new CommandExprResult( 0, new ExpressionNum( 0, 0 ) );
+	If *iff = new If( 0, sub, one, zero );
+	iff->generate( code, table );
+
+}

@@ -63,6 +63,7 @@ int CodeContainer::allocate(unsigned short value)
 void CodeContainer::initStatic(int addr, unsigned short value)
 {
 	size_t index = -addr - 1;
+	assert(index >= 0);
 	assert(staticValues.size() > index);
 	staticValues[index] = value;
 }

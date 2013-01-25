@@ -2,6 +2,9 @@
 #include <sstream>
 #include "Greater.h"
 #include "ExpressionEmpty.h"
+#include "ExpressionNum.h"
+#include "CommandExprResult.h"
+#include "If.h"
 
 using std::endl;
 
@@ -56,8 +59,8 @@ void Greater::generate(CodeContainer *code, SymbolTable *table)
 	code->push_back( code->clearAddr ); // NOP
 	// now: if a>b is true, *exprResultAddr is non-zero, otherwise its zero
 	Expression *empty = new ExpressionEmpty( 0 );
-	Command *one  = new CommandExprResult( 0, new ExpressionEmpty( 0, 1 ) );
-	Command *zero = new CommandExprResult( 0, new ExpressionEmpty( 0, 0 ) );
-	If *iff = new If( 0, sub, one, zero );
+	Command *one  = new CommandExprResult( 0, new ExpressionNum( 0, 1 ) );
+	Command *zero = new CommandExprResult( 0, new ExpressionNum( 0, 0 ) );
+	If *iff = new If( 0, empty, one, zero );
 	iff->generate( code, table );
 }

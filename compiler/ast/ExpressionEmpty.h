@@ -8,7 +8,7 @@
 class ExpressionEmpty: public Expression
 {
   public:
-    ExpressionNum(int line)
+    ExpressionEmpty(int line)
       : Expression(line) { }
 
     std::string explain(int ind) { }

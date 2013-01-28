@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 
 	basemem[0] = START;
 
-	slow = debug = fast = 0;
+	slow = debug = binary = fast = 0;
 	for(i = 1; i < argc; i++)
 	{
 		if(!strcmp(argv[i], "-s") || !strcmp(argv[i], "--slow")) {

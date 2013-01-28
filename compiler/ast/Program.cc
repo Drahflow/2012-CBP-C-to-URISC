@@ -33,7 +33,7 @@ void Program::codeGeneration1(CodeContainer *code, SymbolTable *symbols) {
     (*i)->generate(code, symbols);
   }
 
-  code->initStatic(jumpDelta, afterJumpAddr - symbols->resolveVariable("main").addr);
+  code->initStatic(jumpDelta, afterJumpAddr - symbols->resolveVariable("main").addr - 1);
 }
 
 void Program::codeGeneration2(CodeContainer *, SymbolTable *) {

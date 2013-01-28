@@ -11,7 +11,10 @@ class And: public Expression
 	Expression * augend;
 	Expression * addend;
 	And(int line, Expression *e1, Expression *e2) : Expression(line) { augend = e1; addend = e2;}
+	void generate(CodeContainer *, SymbolTable*);
 	std::string explain(int ind);
 };
+
+
 
 #endif //AND_H

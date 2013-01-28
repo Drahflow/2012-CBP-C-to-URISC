@@ -19,7 +19,7 @@ std::string And::explain(int ind)
 
 void And::generate(CodeContainer * code, SymbolTable* symbols )
 {
-	std::vector<Expression*>* values;
+	std::vector<Expression*>* values = new std::vector<Expression*>();
 	values->push_back( augend);
 	values->push_back( addend);
 	Expression *functionCall = new FunctionCall(0, "And", values);

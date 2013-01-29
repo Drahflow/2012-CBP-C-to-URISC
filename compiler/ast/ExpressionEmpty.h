@@ -11,7 +11,7 @@ class ExpressionEmpty: public Expression
     ExpressionEmpty(int line)
       : Expression(line) { }
 
-    std::string explain(int ind) { }
+    std::string explain(int ind) { return ""; }
     void generate(CodeContainer * code, SymbolTable * table) { }
 };
 

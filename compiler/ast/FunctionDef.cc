@@ -31,26 +31,29 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
   code->addComment("=== Function: " + name + " (Return Code) ===");
   localScope->addVariable(" functionReturn", code->address(), false);
 
+  //std::cout << "local variable count: " << block->getLocalVariableCount() << "\n";
   // increment the stack pointer
   int stackIncConst = code->allocate(-localVariableCount);
+  //std::cout << "local variable count address: " << stackIncConst << "\n";
   code->addLoad(stackIncConst);
+  //code->push_back( code->clearAddr );
   code->push_back(code->stackPointerAddr);
 
   // return to caller
   {
     int addr = code->address();
-    int addrAddr = code->allocate(-(addr + 20));
+    int addrAddr = code->allocate(-(addr + 18)); // what the hell is this for?
 
     code->addComment("stack read for return");
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr); // clear = acc = 0
-    code->push_back(addr + 18);
-    code->push_back(addr + 18); // code = 0
+    code->push_back(addr + 17);
+    code->push_back(addr + 17); // code = 0
     code->push_back(code->stackPointerAddr); // acc = expr
     code->push_back(code->clearAddr); // clear = acc = -expr
     code->push_back(code->clearAddr); // skipped (or expr == 0)
-    code->push_back(addr + 18); // code = acc = expr
+    code->push_back(addr + 17); // code = acc = expr
     code->push_back(instructionPointerTemp);
     code->push_back(instructionPointerTemp);
     code->push_back(instructionPointerTemp); // tmp = acc = 0
@@ -68,6 +71,7 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
   symbols->addVariable(name, code->address(), true);
 
   // decrement the stack pointer for local variables
+  std::cout << "localVariableCount " << localVariableCount << std::endl;
   int stackDecConst = code->allocate(localVariableCount);
   code->addLoad(stackDecConst);
   code->push_back(code->stackPointerAddr);
@@ -81,7 +85,7 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
   block->generate(code, localScope);
 
   // generate jump back to return code
-  int deltaAddr = code->allocate(code->address() + 5 - localScope->resolveVariable(" functionReturn").addr);
+  int deltaAddr = code->allocate(code->address() + 4 - localScope->resolveVariable(" functionReturn").addr);
   code->push_back(code->clearAddr);
   code->push_back(code->clearAddr);
   code->push_back(code->clearAddr);

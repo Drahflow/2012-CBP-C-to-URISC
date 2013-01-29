@@ -27,12 +27,13 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	{
 		(*rit)->generate(code, symbols);
 		code->addStackPush( code->exprResultAddr ); //pushes parameters for the function to the stack
-	}
+	}// perform jump
+
 	code->addClearAkk();
 	int retAddrAddr = code->address()+2;
 	code->push_back( retAddrAddr ); // load 1 to akk
 	code->push_back( code->clearAddr ); // run 0-1 and skip next
-	int retPosition = code->size();
+	int retPosition = code->address();
 	code->push_back( 1 ); // skipped
 	code->push_back( code->tempAddr ); // clear temp
 	code->push_back( code->tempAddr );
@@ -45,21 +46,24 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	code->push_back( code->tempAddr ); // *tempAddr = *retAddrAddr
 	code->addClearAkk();
 	code->addStackPush( code->tempAddr ); // pushes return Address to stack.
-	// perform jump
+	code->addNOP();
 	code->addComment("perform jump to function");
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
 	code->push_back( functionAddress ); // write address to akk
+	code->push_back( code->address() + 2 );
 	code->push_back( 0 ); // perform jump
 	//code->address();
+	code->push_back( code->address() - 1 );
 	code->setInstruction( retPosition, code->address() );
+	code->addComment("return Code from functionCall");
 //    CodeContainer::Instruction instr;
 //	instr.code = code->address();
 //	code->codeContainer[retPosition] = instr;
 	code->addNOP(); // 
 
-code->addComment("pop the parameters from stack");
+	code->addComment("pop the parameters from stack");
 	code->addStackPop( code->tempAddr ); //pops return address from stack
 	for(rit = values_->rbegin(); rit!=values_->rend(); ++rit) 
 	{

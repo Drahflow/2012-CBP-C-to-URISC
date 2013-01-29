@@ -202,6 +202,8 @@ int main(int argc, char **argv)
 				printf("File loading in progress...");
 				fflush(stdout);
                                 if(binary) {
+                                  printf("Binary mode loading...");
+                                  fflush(stdout);
                                   while(pos < 0x8000 && fread(basemem + pos++, 2, 1, fp) == 1);
                                 } else {
                                   while(fgets(line, 1024, fp))

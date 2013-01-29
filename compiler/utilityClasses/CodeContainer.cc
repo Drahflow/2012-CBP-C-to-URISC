@@ -162,6 +162,7 @@ using namespace std;
 
 string CodeContainer::getCodeString(void) {
 	stringstream returnValue;
+        int loadAddr = PROGRAM_OFFSET;
 
         for(vector<string>::const_iterator i = initialComments.begin(); i != initialComments.end(); ++i) {
           returnValue << "; " << *i << "\n";
@@ -172,7 +173,7 @@ string CodeContainer::getCodeString(void) {
 		int instr = it->code;
 		if(instr >= 0)
 		{
-			returnValue << setbase(16) << instr;
+			returnValue << setbase(16) << instr << " ; " << setbase(16) << loadAddr++;
 		}
 		else
 		{
@@ -181,7 +182,7 @@ string CodeContainer::getCodeString(void) {
 			if(!(staticValues.size() > offset)) {
                           returnValue << "; ERROR: static value for " << offset << " not allocated";
                         } else {
-                          returnValue << setbase(16) << codeContainer.size() + offset + PROGRAM_OFFSET;
+                          returnValue << setbase(16) << codeContainer.size() + offset + PROGRAM_OFFSET << " ; " << setbase(16) << loadAddr++;
                         }
 		}
 		returnValue << "\n";
@@ -196,7 +197,7 @@ string CodeContainer::getCodeString(void) {
 	// write default values
 	for(vector<unsigned short>::iterator it = staticValues.begin(); it != staticValues.end(); ++it)
 	{
-		returnValue << setbase(16) << *it;
+		returnValue << setbase(16) << *it << " ; " << setbase(16) << loadAddr++;
 		returnValue << "\n";
 	}
 	return returnValue.str();

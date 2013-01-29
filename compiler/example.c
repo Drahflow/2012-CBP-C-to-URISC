@@ -49,6 +49,8 @@ int main(void)
   int dpos;
   int nextrow;
   
+  *1 = 1; // enable display output
+
   nextrow = 0x0080;
   
   i = 0;

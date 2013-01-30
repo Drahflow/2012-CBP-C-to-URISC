@@ -30,8 +30,8 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(code->allocate(var.addr));
     code->push_back(code->exprResultAddr); // expr = -addr
     code->addLoad(code->stackPointerAddr);
-    code->push_back(code->clearAddr);
-    code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr); // *clearAddr = - *stackPointerAddr
+    code->push_back(code->clearAddr); // skipped
     code->push_back(code->exprResultAddr); // expr = stack pointer - addr
 
     int addr = code->address();

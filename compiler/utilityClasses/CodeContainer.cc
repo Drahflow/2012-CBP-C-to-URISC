@@ -70,7 +70,7 @@ void CodeContainer::initStatic(int addr, unsigned short value)
 
 void CodeContainer::addLoad(int addr)
 {
-	addClearAkk();
+	addNOP();
 	push_back(addr);
 }
 
@@ -170,6 +170,7 @@ void CodeContainer::addStackPop( int addr )
 	push_back(addr); // store stack value to addr
 	// change stack pointer by +1
 	addComment( "StackPointer + 1" );
+	push_back(clearAddr);
 	push_back(clearAddr);
 	push_back(clearAddr);
 	push_back(clearAddr);

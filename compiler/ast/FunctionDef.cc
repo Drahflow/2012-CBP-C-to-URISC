@@ -42,18 +42,20 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
   // return to caller
   {
     int addr = code->address();
-    int addrAddr = code->allocate(-(addr + 18)); // what the hell is this for?
+    int addrAddr = code->allocate(-(addr + 22)); // what the hell is this for?
 
     code->addComment("stack read for return");
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr);
     code->push_back(code->clearAddr); // clear = acc = 0
-    code->push_back(addr + 17);
-    code->push_back(addr + 17); // code = 0
+    code->push_back(addr + 20);
+    code->push_back(addr + 20); // code = 0
     code->push_back(code->stackPointerAddr); // acc = expr
     code->push_back(code->clearAddr); // clear = acc = -expr
     code->push_back(code->clearAddr); // skipped (or expr == 0)
-    code->push_back(addr + 17); // code = acc = expr
+    code->push_back(addr + 20); // code = acc = expr
+    code->push_back(instructionPointerTemp);
     code->push_back(instructionPointerTemp);
     code->push_back(instructionPointerTemp);
     code->push_back(instructionPointerTemp); // tmp = acc = 0
@@ -61,10 +63,12 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(instructionPointerTemp); // tmp = code address
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr);
+    code->push_back(code->clearAddr);
     code->push_back(code->clearAddr); // clear = acc = 0
     code->push_back(0xEEEE); // self modified // acc = *(original expr) = return address
     code->push_back(instructionPointerTemp); // acc = tmp - return address
     code->push_back(0); // instr = instr - acc = instr - (code address - return address)
+    code->push_back(0); // same as before in case of jumped over 
   }
 
   code->addComment("=== Function: " + name + " ===");

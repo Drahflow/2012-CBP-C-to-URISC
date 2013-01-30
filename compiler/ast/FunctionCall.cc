@@ -33,7 +33,7 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	int retAddrAddr = code->address()+2;
 	code->push_back( retAddrAddr ); // load 1 to akk
 	code->push_back( code->clearAddr ); // run 0-1 and skip next
-	int retPosition = code->address();
+	int retPosition = code->size();
 	code->push_back( 1 ); // skipped
 	code->push_back( code->tempAddr ); // clear temp
 	code->push_back( code->tempAddr );
@@ -56,6 +56,7 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	code->push_back( 0 ); // perform jump
 	//code->address();
 	code->push_back( code->address() - 1 );
+	code->addNOP(); // NOP for non-determinitic backjump
 	code->setInstruction( retPosition, code->address() );
 	code->addComment("return Code from functionCall");
 //    CodeContainer::Instruction instr;

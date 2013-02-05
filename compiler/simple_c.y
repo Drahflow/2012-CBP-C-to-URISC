@@ -66,12 +66,12 @@
 // %token EQ
 // %token NE
 
+%right '='
 %left '<' '>' GTEQ LTEQ EQ NE
 %left '+' '-'
 %left '*' '/'
 %left '&' '|'
 %left '!'
-%right '='
 
 %start program
 
@@ -144,13 +144,13 @@ command: block { $$ = $1; }
   | WHILE '(' expression ')' command { $$ = new While(@$.first_line, $3, $5); }
   | RETURN expression ';' { $$ = new Return(@$.first_line, $2); }
   | FOR '(' expression ';' expression ';' expression ')' command { $$ = new For(@$.first_line, $3, $5, $7, $9); };
+  | '*' expression '=' expression {$$=new IndirectionAssignment(@$.first_line,$2,$4);}
 
 ifclause: IF '(' expression ')' { $$ = $3; };
 
 expression: 
     NAME '=' expression       { $$ = new Assignment(@$.first_line,$1,$3);}
   | NAME '(' values ')'       { $$ = new FunctionCall(@$.first_line,$1,$3);}
-  | '*' expression '=' expression{$$=new IndirectionAssignment(@$.first_line,$2,$4);}
   | expression '+' expression { $$ = new Addition(@$.first_line, $1,$3);}
   | expression '-' expression { $$ = new Subtraction(@$.first_line, $1, $3);}
   | expression '*' expression { $$ = new Multiplication(@$.first_line, $1, $3);}

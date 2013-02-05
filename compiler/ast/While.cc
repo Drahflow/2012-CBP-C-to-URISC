@@ -18,6 +18,7 @@ string While::explain(int ind)
 
 void While::generate(CodeContainer* code, SymbolTable* table)
 {
+	code->addComment("=== While:");
 	// get address of first loop instruction
 	pcBeginLoop = code->address();
 	// allocate memory for jump address
@@ -29,13 +30,16 @@ void While::generate(CodeContainer* code, SymbolTable* table)
 	// test loop condition with implicit If and use extended loop body
 	If temp(getLine(), condition, &wrapper);
 	temp.generate(code, table);
+	code->addComment("=== /While");
 	
 }
 
 // callback function to CommandWrapper, adds GOTO *beginLoopAddr
 void While::genEpilogue(CodeContainer* code, SymbolTable* table)
 {
+	code->addComment("=== load jump delta to loop head");
 	code->addLoad(beginLoopAddr);
+	code->addComment("=== jump to loop head");
 	code->push_back(0);
 	code->initStatic(beginLoopAddr, code->address() - pcBeginLoop - (unsigned short) 1);
 }

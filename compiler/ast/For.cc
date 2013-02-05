@@ -25,6 +25,7 @@ std::string For::explain(int ind)
 
 void For::generate(CodeContainer* code, SymbolTable* table)
 {
+	code->addComment("=== For:");
 	// generate init statement
 	init->generate(code, table);
 	
@@ -33,10 +34,13 @@ void For::generate(CodeContainer* code, SymbolTable* table)
 	CommandWrapper wrapper(body, this);
 	While temp(getLine(), condition, &wrapper);
 	temp.generate(code, table);
+	code->addComment("=== /For");
 }
 
 // add call to update statement to loop body
 void For::genEpilogue(CodeContainer* code, SymbolTable* table)
 {
+	code->addComment("=== For: update");
 	update->generate(code, table);
+	code->addComment("=== For: /update");
 }

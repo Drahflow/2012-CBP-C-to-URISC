@@ -34,7 +34,8 @@ void IntArrayDef::generate(CodeContainer *code, SymbolTable *symbols)
         }
 
 	// allocate pointer
-	int pointerAddr = code->allocate(headAddr);
+	int pointerAddr = code->allocate();
+	code->initSigned(pointerAddr, headAddr);
 	
 	// add pointer to symbol table
 	symbols->addVariable(name, pointerAddr, global);

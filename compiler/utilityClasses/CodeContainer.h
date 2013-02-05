@@ -18,7 +18,7 @@ class CodeContainer
 
         std::vector<std::string> initialComments;
         std::vector<Instruction> codeContainer;
-        std::vector<unsigned short> staticValues;
+        std::vector<int> staticValues;
 
         public:
         // address of clear dummy
@@ -59,6 +59,7 @@ class CodeContainer
         
         // (re)sets default value of statically allocated memory
         void initStatic(int addr, unsigned short value);
+        void initSigned(int addr, int value);
         
         // clears memory and acc at addr
         void addClear(int addr);

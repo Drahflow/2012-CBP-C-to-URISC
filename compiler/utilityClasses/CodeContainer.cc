@@ -68,6 +68,17 @@ void CodeContainer::initStatic(int addr, unsigned short value)
 	staticValues[index] = value;
 }
 
+void CodeContainer::initSigned(int addr, int value)
+{
+	int index = -addr - 1;
+	assert(index >= 0);
+	assert(staticValues.size() > index);
+	// when using a reference to another static address, check bounds
+	assert(value >= 0 || staticValues.size() > -value - 1);
+	staticValues[index] = value;
+}
+
+
 void CodeContainer::addLoad(int addr)
 {
 	addNOP();
@@ -224,9 +235,18 @@ string CodeContainer::getCodeString(void) {
 	}
         returnValue << "; ===== const table =====\n";
 	// write default values
-	for(vector<unsigned short>::iterator it = staticValues.begin(); it != staticValues.end(); ++it)
+	for(vector<int>::iterator it = staticValues.begin(); it != staticValues.end(); ++it)
 	{
-		returnValue << setbase(16) << *it << " ; " << setbase(16) << loadAddr++;
+		if(*it >= 0)
+		{
+			returnValue << setbase(16) << (unsigned short) *it << " ; " << setbase(16) << loadAddr++;
+		}
+		else
+		{
+			size_t offset = -*it - 1;
+			assert(staticValues.size() > offset);
+			returnValue << setbase(16) << codeContainer.size() + offset + PROGRAM_OFFSET << " ; " << setbase(16) << loadAddr++;
+		}	
 		returnValue << "\n";
 	}
 	return returnValue.str();

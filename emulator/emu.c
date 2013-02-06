@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 	XMapWindow(display,win);
 	XFlush(display);
 
-	while(1)
+	while(basemem[0])
 	{
 		if(XCheckMaskEvent(display,ExposureMask|KeyPressMask,&event))
 			switch(event.type)
@@ -360,4 +360,6 @@ int main(int argc, char **argv)
 		}
 	}
 	XCloseDisplay(display);
+
+        return 0;
 }

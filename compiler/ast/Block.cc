@@ -29,17 +29,19 @@ void Block::generate(CodeContainer *code, SymbolTable *symbols) {
     }
     localScope->addVariable(" stackOffset", addr, false);
   }
-
-  for(vector<Command *>::const_iterator i = commands->begin(); i != commands->end(); ++i) {
-    // code->addComment((*i)->explain(0)); // does not work in reality, because of \n
-    (*i)->generate(code, localScope);
+  if(commands != NULL) {
+    for(vector<Command *>::const_iterator i = commands->begin(); i != commands->end(); ++i) {
+	  // code->addComment((*i)->explain(0)); // does not work in reality, because of \n
+      (*i)->generate(code, localScope);
+    }
   }
 }
 
 int Block::getLocalVariableCount() const {
   int direct = variables? variables->size(): 0;
   int indirect = 0;
-
+  if(commands == NULL)
+	  return direct;
   for(vector<Command *>::const_iterator i = commands->begin(); i != commands->end(); ++i) {
     const int localVars = (*i)->getLocalVariableCount();
     if(localVars > indirect) indirect = localVars;

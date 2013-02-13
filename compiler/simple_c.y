@@ -144,7 +144,7 @@ command: block { $$ = $1; }
   | WHILE '(' expression ')' command { $$ = new While(@$.first_line, $3, $5); }
   | RETURN expression ';' { $$ = new Return(@$.first_line, $2); }
   | FOR '(' expression ';' expression ';' expression ')' command { $$ = new For(@$.first_line, $3, $5, $7, $9); };
-  | '*' expression '=' expression {$$=new IndirectionAssignment(@$.first_line,$2,$4);}
+  | '*' expression '=' expression ';' {$$=new IndirectionAssignment(@$.first_line,$2,$4);}
 
 ifclause: IF '(' expression ')' { $$ = $3; };
 

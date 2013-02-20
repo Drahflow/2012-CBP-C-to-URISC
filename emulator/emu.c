@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+;
 
 /* ==== Machine Spec ====
  *
@@ -163,7 +164,7 @@ void redraw(Window win,GC gc)
 int main(int argc, char **argv)
 {
 	int screennum;
-	int slow, debug, i;
+	int slow, debug, i, medium;
         int binary;
 	Window root_window;
 	Window win;
@@ -177,13 +178,15 @@ int main(int argc, char **argv)
 
 	basemem[0] = START;
 
-	slow = debug = binary = fast = 0;
+	medium = slow = debug = binary = fast = 0;
 	for(i = 1; i < argc; i++)
 	{
 		if(!strcmp(argv[i], "-s") || !strcmp(argv[i], "--slow")) {
 			slow = debug = 1;
                 } else if(!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")) {
 			debug = 1;
+                } else if(!strcmp(argv[i], "-m") || !strcmp(argv[i], "--medium")) {
+			medium = debug = 1;
                 } else if(!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fast")) {
 			fast = 1;
                 } else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
@@ -356,10 +359,12 @@ int main(int argc, char **argv)
 				}
 				if(slow)
 					sleep(1);
+				if(medium)
+					usleep(100000);
 			}
 		}
 	}
+	sleep(5);
 	XCloseDisplay(display);
-
         return 0;
 }

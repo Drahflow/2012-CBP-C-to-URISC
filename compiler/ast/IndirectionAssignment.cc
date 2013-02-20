@@ -60,6 +60,10 @@ void IndirectionAssignment::generate(CodeContainer* code, SymbolTable* table)
 	code->push_back( 0xeeee ); // get overwritten to clear stackaddress
 	code->push_back( 0xeeee );
 	code->push_back( 0xeeee );
+	code->push_back( code->clearAddr ); //clear *clearAddr and akk
+	code->push_back( code->clearAddr ); //clear *clearAddr and akk
+	code->push_back( code->clearAddr ); //clear *clearAddr and akk
+	code->push_back( code->clearAddr ); //clear *clearAddr and akk
 	localAddr = code->address();
 	code->push_back(localAddr + 14);
 	code->push_back(localAddr + 14);
@@ -73,8 +77,9 @@ void IndirectionAssignment::generate(CodeContainer* code, SymbolTable* table)
 	code->push_back( code->clearAddr ); //clear *clearAddr and akk
 	code->push_back( code->clearAddr ); //clear *clearAddr and akk
 	code->push_back(code->tempAddr); // load result of the right expression
-	code->push_back(code->clearAddr); // store -(*addr) in akk and borrow
-	code->push_back(1); // skip, use the 1 later
+	code->push_back(code->clearAddr); // store -(*addr) in akk and borrow except if zero
+	code->push_back(code->clearAddr); // skipped or zero
+	//code->push_back(0); // skip, use the 1 later
 	//int oneAddr = localAddr + 7;
 	code->push_back( 0xeeee ); // store *addr at the pointer position
 

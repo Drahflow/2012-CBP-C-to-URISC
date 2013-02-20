@@ -70,4 +70,5 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	{
 		code->addStackPop( code->tempAddr ); //pops parameters from stack
 	}
+	code->addComment("end of FunctionCall");
 }

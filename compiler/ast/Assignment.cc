@@ -59,9 +59,9 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		code->push_back(localAddr + 17);
 		code->push_back(code->tempAddr);
 		code->push_back(localAddr + 17);
-		code->push_back(0); // get overwritten to clear stackaddress
-		code->push_back(0);
-		code->push_back(0);
+		code->push_back( 0xeeee ); // get overwritten to clear stackaddress
+		code->push_back( 0xeeee );
+		code->push_back( 0xeeee );
 		localAddr = code->address();
 		code->push_back(localAddr + 8);
 		code->push_back(localAddr + 8);
@@ -70,8 +70,8 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		code->push_back(localAddr + 8);
 		code->push_back(code->exprResultAddr); // load result of the right expression
 		code->push_back(code->clearAddr); // store -(*addr) in akk and borrow
-		code->push_back(1); // skip, use the 1 later
+		code->push_back(code->clearAddr); // skip, or zero
 		//int oneAddr = localAddr + 7;
-		code->push_back(0); // store *addr at the pointer position
+		code->push_back( 0xeeee ); // store *addr at the pointer position
 	}
 }

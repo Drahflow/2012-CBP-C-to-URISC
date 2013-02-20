@@ -27,6 +27,6 @@ void Addition::generate(CodeContainer *code, SymbolTable *table)
 	code->push_back(code->clearAddr);
 	code->push_back(code->tempAddr); // load *tempAddr to akk
 	code->push_back(code->clearAddr); // (0-x)
-	code->push_back(1); // skip
+	code->push_back(code->clearAddr); // skip
 	code->push_back(code->exprResultAddr); // (*exprResultAddr) + x
 }

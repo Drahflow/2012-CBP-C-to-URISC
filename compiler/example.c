@@ -37,8 +37,15 @@ int data[3] = { 42, 1337, 23 /* , ... */ };
 
 int drawbyte(int pos, int b)
 {
+  *0x800a = b;
   if(b & 0x80) *(pos + 0x8000) = 1;
   if(b & 0x40) *(pos + 0x8001) = 1;
+  if(b & 0x20) *(pos + 0x8002) = 1;
+  if(b & 0x10) *(pos + 0x8003) = 1;
+  if(b & 0x08) *(pos + 0x8004) = 1;
+  if(b & 0x04) *(pos + 0x8005) = 1;
+  if(b & 0x02) *(pos + 0x8006) = 1;
+  if(b & 0x01) *(pos + 0x8007) = 1;
   // ...
 }
 
@@ -48,9 +55,9 @@ int main(void)
   int j;
   int dpos;
   int nextrow;
-  
+ 
   *1 = 1; // enable display output
-
+  drawbyte( 0, 0x80);
   nextrow = 0x0080;
   
   i = 0;

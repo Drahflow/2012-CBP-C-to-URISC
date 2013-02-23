@@ -37,6 +37,7 @@ void If::generate(CodeContainer* code, SymbolTable* table)
   code->addComment("=== If: condition:");
   condition->generate(code, table);
   code->addComment("=== /If: condition");
+  code->addNOP();
   code->addComment("=== clearing private zeroAddr");
   code->addClear(zeroAddr);
   // the address of the condition value

@@ -357,13 +357,23 @@ int main(int argc, char **argv)
 					printf("%04X next %04X\n", acc, basemem[0]);
 					fflush(stdout);
 					if( command == 0xDEB6 ) {
-						printf("DEBU6: \nakk: %04X\nexprResult: %04X\ntemp: %04X\n", acc, basemem[0x7FFE], basemem[0x7FFD], basemem[0x7FFc]);
+						printf("DEBU6: \nakk: %04X\nexprResult: %04X\ntemp: %04X\nfunctionStackPointer: %04X\n", acc, basemem[0x7FFE], basemem[0x7FFD], basemem[0x7FFc]);
+						printf("stack01: %04X\n", basemem[0x7FFB]);
+						printf("stack02: %04X\n", basemem[0x7FFA]);
+						printf("stack03: %04X\n", basemem[0x7FF9]);
+						printf("stack04: %04X\n", basemem[0x7FF8]);
+						printf("stack05: %04X\n", basemem[0x7FF7]);
+						printf("stack06: %04X\n", basemem[0x7FF6]);
+						printf("stack07: %04X\n", basemem[0x7FF5]);
+						printf("stack08: %04X\n", basemem[0x7FF4]);
+						printf("stack09: %04X\n", basemem[0x7FF3]);
+						printf("stack10: %04X\n", basemem[0x7FF2]);
 					}
 				}
 				if(slow)
 					sleep(1);
 				if(medium)
-					usleep(100000);
+					usleep(20000);
 			}
 		}
 	}

@@ -16,8 +16,9 @@ void ExpressionNum::generate(CodeContainer *code, SymbolTable *) {
   stringstream comment;
   comment << "constant " << num;
   code->addComment(comment.str());
-
+  code->addNOP();
   if(num == 0) {
+    code->push_back(code->exprResultAddr);
     code->push_back(code->exprResultAddr);
     code->push_back(code->exprResultAddr);
     code->push_back(code->exprResultAddr); // expr = 0

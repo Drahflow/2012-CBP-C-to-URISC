@@ -32,6 +32,7 @@ class CodeContainer
 
         // address of expression result
         const int stackPointerAddr;
+        const int functionStackPointerAddr; //the functionStackPointerAddr tracks functionCalls and is neede for local Variables
 
         void push_back(int code);
         void addComment(const std::string &);
@@ -51,6 +52,7 @@ class CodeContainer
         // pushes and pops *addr to the stack
         void addStackPush( int addr);
         void addStackPop( int addr);
+		void setFunctionStackPointer( int addr );
         /* 
          * allocates a new static address after the program code,
          * initializes it to value and returns the temporary address (< 0)
@@ -66,7 +68,7 @@ class CodeContainer
         std::string getCodeString(void); 
 
         CodeContainer()
-          : clearAddr(0x7FFF), exprResultAddr(0x7FFE), tempAddr(0x7FFD), stackPointerAddr(allocate(0x7FFC)) { }
+          : clearAddr(0x7FFF), exprResultAddr(0x7FFE), tempAddr(0x7FFD), stackPointerAddr(allocate(0x7FFB)), functionStackPointerAddr(0x7FFC) { }
 };
 
 #endif //CODECONTAINER_H

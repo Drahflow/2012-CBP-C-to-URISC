@@ -47,7 +47,7 @@ int data[17] = {
 
 int drawbyte(int pos, int b)
 {
-  *0x800a = b;
+  //*0x800a = b;
   if(b & 0x80) *(pos + 0x8000) = 1;
   if(b & 0x40) *(pos + 0x8001) = 1;
   if(b & 0x20) *(pos + 0x8002) = 1;

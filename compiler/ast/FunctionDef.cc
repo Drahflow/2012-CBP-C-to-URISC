@@ -79,17 +79,22 @@ void FunctionDef::generate(CodeContainer *code, SymbolTable *symbols) {
   int stackDecConst = code->allocate(localVariableCount);
   code->addLoad(stackDecConst);
   code->push_back(code->stackPointerAddr);
+  code->setFunctionStackPointer( code->stackPointerAddr );
 
-  int addr = -localVariableCount - 1;
+  int addr = -localVariableCount ;
   for(varlist::const_iterator i = parameters->begin(); i != parameters->end(); ++i) {
     (*i)->setLocalAddr(--addr);
+    //std::cerr << "localvariables " << (*i)->getName() << ": " << addr << "\n";
     (*i)->generate(code, localScope);
   }
+  
 
   block->generate(code, localScope);
 
   // generate jump back to return code
   int deltaAddr = code->allocate(code->address() + 4 - localScope->resolveVariable(" functionReturn").addr);
+  //std::cerr << "freturn " << localScope->resolveVariable(" functionReturn").addr << "\n";
+  //std::cerr << "sreturn " << localScope->resolveVariable(" stackOffset").addr << "\n";
   code->push_back(code->clearAddr);
   code->push_back(code->clearAddr);
   code->push_back(code->clearAddr);

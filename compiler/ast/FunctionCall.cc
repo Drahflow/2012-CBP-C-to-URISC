@@ -22,19 +22,21 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	int functionAddress = code->allocate( functionVariable.addr );
 	std::vector<Expression*>::reverse_iterator rit; // reverse iterator
 	int valueSize = values_->size();
+	code->addStackPush( code->functionStackPointerAddr );
 	code->addComment("put expressions to the stack");
 	for(rit = values_->rbegin(); rit!=values_->rend(); ++rit) 
 	{
+		code->addNOP();
 		(*rit)->generate(code, symbols);
 		code->addStackPush( code->exprResultAddr ); //pushes parameters for the function to the stack
 	}// perform jump
 
-	code->addClearAkk();
+	code->addNOP();
 	int retAddrAddr = code->address()+2;
-	code->push_back( retAddrAddr ); // load 1 to akk
-	code->push_back( code->clearAddr ); // run 0-1 and skip next
+	code->push_back( retAddrAddr ); // load returnAddress to akk
+	code->push_back( code->clearAddr ); // run 0-*returnAddress and skip next
 	int retPosition = code->size();
-	code->push_back( 1 ); // skipped
+	code->push_back( 0xEFEF ); // skipped
 	code->push_back( code->tempAddr ); // clear temp
 	code->push_back( code->tempAddr );
 	code->push_back( code->tempAddr );
@@ -70,5 +72,6 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	{
 		code->addStackPop( code->tempAddr ); //pops parameters from stack
 	}
+	code->addStackPop( code->functionStackPointerAddr );
 	code->addComment("end of FunctionCall");
 }

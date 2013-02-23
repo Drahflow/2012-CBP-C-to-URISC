@@ -31,39 +31,54 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 	}
 	else {
 		code->addComment("local Variable Assignment");
-		code->push_back(0xDEB6);
+		//code->push_back(0xDEB6);
 		code->addStackPush(code->exprResultAddr); // pushes exprResult to stack
 		// calculation of the variable address:
 		code->addComment("get local variable address");
 		code->addClear(code->tempAddr);
 		code->push_back(code->allocate(variable.addr));
 		code->push_back(code->tempAddr); // expr = -addr
-		code->addLoad(code->stackPointerAddr); // akk = *stackPointerAddr
-		code->push_back(code->clearAddr); // akk = 0 - *stackPointerAddr
+		code->addLoad(code->functionStackPointerAddr); // akk = *functionStackPointerAddr
+		code->push_back(code->clearAddr); // akk = 0 - *functionStackPointerAddr
 		code->push_back(code->clearAddr); // skipped or zero
 		code->push_back(code->tempAddr); // expr = stack pointer - addr
 		code->push_back(code->clearAddr); // skipped or not
-		code->push_back( 0xDEB6 ); //debug output
+		//code->push_back( 0xDEB6 ); //debug output
 		// move  exprResult to variable address in code->tempAddr
 		code->addComment("move exprResult local variable address");
 		code->addStackPop(code->exprResultAddr); // pops the right expr result to tempAddr
 		code->addClearAkk();
 		int localAddr = code->address();
-		code->push_back(localAddr + 15);
-		code->push_back(localAddr + 15);
-		code->push_back(localAddr + 15);
+		code->push_back(localAddr + 30);
+		code->push_back(localAddr + 30);
+		code->push_back(localAddr + 30);
 		code->push_back(code->tempAddr);
-		code->push_back(localAddr + 15);
-		code->push_back(localAddr + 16);
-		code->push_back(localAddr + 16);
-		code->push_back(localAddr + 16);
+		code->push_back( code->clearAddr ); // 0 - *tempAddr
+		code->push_back( code->clearAddr ); // skipped or zero
+		code->push_back(localAddr + 30);
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
+		code->push_back(localAddr + 31);
+		code->push_back(localAddr + 31);
+		code->push_back(localAddr + 31);
 		code->push_back(code->tempAddr);
-		code->push_back(localAddr + 16);
-		code->push_back(localAddr + 17);
-		code->push_back(localAddr + 17);
-		code->push_back(localAddr + 17);
+		code->push_back( code->clearAddr ); // 0 - *tempAddr
+		code->push_back( code->clearAddr ); // skipped or zero
+		code->push_back(localAddr + 31);
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
+		code->push_back(localAddr + 32);
+		code->push_back(localAddr + 32);
+		code->push_back(localAddr + 32);
 		code->push_back(code->tempAddr);
-		code->push_back(localAddr + 17);
+		code->push_back( code->clearAddr ); // 0 - *tempAddr
+		code->push_back( code->clearAddr ); // skipped or zero
+		code->push_back(localAddr + 32);
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
+		code->push_back( code->clearAddr );
 		code->push_back( 0xeeee ); // get overwritten to clear stackaddress
 		code->push_back( 0xeeee );
 		code->push_back( 0xeeee );
@@ -86,7 +101,7 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		code->addComment("local Variable Assignment assignment");
 		code->push_back( 0xeeee ); // store *addr at the pointer position
 		code->push_back(code->clearAddr); //
-		code->push_back(0xDEB6);
+		//code->push_back(0xDEB6);
 		code->push_back(code->clearAddr); //
 	}
 }

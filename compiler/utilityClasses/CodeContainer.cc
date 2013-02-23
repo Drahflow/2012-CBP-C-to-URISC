@@ -44,6 +44,7 @@ void CodeContainer::addClear(int addr)
 	push_back(addr);
 	push_back(addr);
 	push_back(addr);
+	push_back(addr);
 }
 
 void CodeContainer::addNOP()
@@ -89,7 +90,7 @@ void CodeContainer::addStackPush( int addr )
 {
 	addComment( "StackPush" );
 	// change stack pointer value by -1
-	addClearAkk();
+	addNOP();
 	int pos = size();
 	int oneAddr = allocate();
 	initStatic(oneAddr, 1);
@@ -136,7 +137,7 @@ void CodeContainer::addStackPush( int addr )
 	push_back(localAddr + 14);
 	push_back(stackPointerAddr);
 	push_back( localAddr + 5);  // 0 - *stackPointerAddr
-	push_back( 0xEEEE );  // skipped address is localAddr+5
+	push_back( 0 );  // skipped address is localAddr+5
 	push_back(localAddr + 14);
 	push_back( clearAddr ); // clear *cleaAddr and akk
 	push_back( clearAddr ); // clear *cleaAddr and akk
@@ -162,10 +163,10 @@ void CodeContainer::addStackPop( int addr )
 {
 	addComment( "StackPop" );
 	// pop:
-	addClear(addr);
+	addNOP();
 	addClear(clearAddr);
-	push_back(clearAddr); //store -(*stackPointerAddr)
-	push_back(clearAddr); // skip
+	push_back(clearAddr); 
+	addClear(addr);
 	int localAddr = address();
 	push_back(localAddr + 10);
     push_back(localAddr + 10);
@@ -195,6 +196,20 @@ void CodeContainer::addStackPop( int addr )
 	push_back(clearAddr); // skipped or zero
 	push_back(stackPointerAddr); // (*stackPointerAddr) + 1
 
+}
+
+void CodeContainer::setFunctionStackPointer( int addr )
+{
+	push_back( clearAddr );
+	push_back( clearAddr );
+	push_back( clearAddr );
+	push_back( clearAddr );
+	push_back( functionStackPointerAddr );
+	push_back( functionStackPointerAddr );
+	push_back( addr );
+	push_back( clearAddr ); // 0 - *addr
+	push_back( clearAddr ); // skipped or zero
+	push_back( functionStackPointerAddr ); // *functionStackPointerAddr = *addr
 }
 
 int CodeContainer::size()

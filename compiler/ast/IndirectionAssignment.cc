@@ -19,9 +19,10 @@ std::string IndirectionAssignment::explain(int ind)
 void IndirectionAssignment::generate(CodeContainer* code, SymbolTable* table)
 {
 	code->addComment( "IndirectionAssignment start" );
+	code->addNOP();
 	augend->generate(code, table); // evaluated the expression on the right side of the =
 	code->addStackPush(code->exprResultAddr); // pushes exprResult to stack
-
+	code->addNOP();
 	pointer_->generate(code, table); // evalutes the pointer address
 	code->addStackPop(code->tempAddr); // pops the right expr result to tempAddr
 	code->addClearAkk();

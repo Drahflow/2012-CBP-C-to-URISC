@@ -17,11 +17,13 @@ std::string Addition::explain(int ind)
 
 void Addition::generate(CodeContainer *code, SymbolTable *table)
 {
+	code->addComment( "Addition start" );
 	addend->generate(code, table);
 	code->addStackPush(code->exprResultAddr);
 	augend->generate(code, table);
 	code->addStackPop(code->tempAddr);
 	// change stack pointer by +1
+	code->addComment( "Addition" );
 	code->push_back(code->clearAddr);
 	code->push_back(code->clearAddr);
 	code->push_back(code->clearAddr);

@@ -35,7 +35,7 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(code->exprResultAddr); // expr = stack pointer - addr
 
     int addr = code->address();
-    code->addComment("indirect memory access");
+    code->addComment("indirect memory access NAME");
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr);
     code->push_back(code->clearAddr); // clear = acc = 0

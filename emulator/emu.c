@@ -356,6 +356,9 @@ int main(int argc, char **argv)
 				{
 					printf("%04X next %04X\n", acc, basemem[0]);
 					fflush(stdout);
+					if( command == 0xDEB6 ) {
+						printf("DEBU6: \nakk: %04X\nexprResult: %04X\ntemp: %04X\n", acc, basemem[0x7FFE], basemem[0x7FFD], basemem[0x7FFc]);
+					}
 				}
 				if(slow)
 					sleep(1);

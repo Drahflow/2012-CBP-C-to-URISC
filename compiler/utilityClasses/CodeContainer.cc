@@ -136,7 +136,7 @@ void CodeContainer::addStackPush( int addr )
 	push_back(localAddr + 14);
 	push_back(stackPointerAddr);
 	push_back( localAddr + 5);  // 0 - *stackPointerAddr
-	push_back( 0 );  // skipped address is localAddr+5
+	push_back( 0xEEEE );  // skipped address is localAddr+5
 	push_back(localAddr + 14);
 	push_back( clearAddr ); // clear *cleaAddr and akk
 	push_back( clearAddr ); // clear *cleaAddr and akk

@@ -17,8 +17,10 @@ std::string Assignment::explain(int ind)
 
 void Assignment::generate(CodeContainer *code, SymbolTable *table)
 {
+	code->addComment("Assignment");
 	augend->generate(code, table); // evaluated the expression on the right side of the =
 	SymbolTable::Variable variable = table->resolveVariable( name_ );
+	code->addNOP();
 	if( variable.global ) {
 		code->addClear( variable.addr );
 		code->addClear( code->clearAddr );
@@ -28,17 +30,20 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		code->push_back( variable.addr ); //
 	}
 	else {
+		code->addComment("local Variable Assignment");
+		code->push_back(0xDEB6);
 		code->addStackPush(code->exprResultAddr); // pushes exprResult to stack
 		// calculation of the variable address:
 		code->addComment("get local variable address");
 		code->addClear(code->tempAddr);
 		code->push_back(code->allocate(variable.addr));
 		code->push_back(code->tempAddr); // expr = -addr
-		code->addLoad(code->stackPointerAddr);
-		code->push_back(code->clearAddr);
-		code->push_back(code->clearAddr);
+		code->addLoad(code->stackPointerAddr); // akk = *stackPointerAddr
+		code->push_back(code->clearAddr); // akk = 0 - *stackPointerAddr
+		code->push_back(code->clearAddr); // skipped or zero
 		code->push_back(code->tempAddr); // expr = stack pointer - addr
-
+		code->push_back(code->clearAddr); // skipped or not
+		code->push_back( 0xDEB6 ); //debug output
 		// move  exprResult to variable address in code->tempAddr
 		code->addComment("move exprResult local variable address");
 		code->addStackPop(code->exprResultAddr); // pops the right expr result to tempAddr
@@ -63,15 +68,25 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		code->push_back( 0xeeee );
 		code->push_back( 0xeeee );
 		localAddr = code->address();
-		code->push_back(localAddr + 8);
-		code->push_back(localAddr + 8);
-		code->push_back(localAddr + 8);
+		code->push_back(localAddr + 14);
+		code->push_back(localAddr + 14);
+		code->push_back(localAddr + 14);
 		code->push_back(code->tempAddr);
-		code->push_back(localAddr + 8);
+		code->push_back( code->clearAddr ); // 0 - *tempAddr
+		code->push_back( code->clearAddr ); // skipped or zero
+		code->push_back(localAddr + 14);
+		code->push_back( code->clearAddr ); //
+		code->push_back( code->clearAddr ); //
+		code->push_back( code->clearAddr ); //
+		code->push_back( code->clearAddr ); //
 		code->push_back(code->exprResultAddr); // load result of the right expression
 		code->push_back(code->clearAddr); // store -(*addr) in akk and borrow
 		code->push_back(code->clearAddr); // skip, or zero
 		//int oneAddr = localAddr + 7;
+		code->addComment("local Variable Assignment assignment");
 		code->push_back( 0xeeee ); // store *addr at the pointer position
+		code->push_back(code->clearAddr); //
+		code->push_back(0xDEB6);
+		code->push_back(code->clearAddr); //
 	}
 }

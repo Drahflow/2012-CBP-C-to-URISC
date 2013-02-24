@@ -373,10 +373,11 @@ int main(int argc, char **argv)
 				if(slow)
 					sleep(1);
 				if(medium)
-					usleep(20000);
+					usleep(1000);
 			}
 		}
 	}
+	redraw(win,gc);
 	sleep(5);
 	XCloseDisplay(display);
         return 0;

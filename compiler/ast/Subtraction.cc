@@ -17,6 +17,7 @@ std::string Subtraction::explain(int ind)
 
 void Subtraction::generate(CodeContainer* code, SymbolTable* table)
 {
+	code->addComment("=== Subtraction Start ===");
 	addend->generate(code, table);
 	code->addStackPush(code->exprResultAddr);
 	augend->generate(code, table);
@@ -28,4 +29,5 @@ void Subtraction::generate(CodeContainer* code, SymbolTable* table)
 	code->push_back(code->tempAddr);
 	code->push_back(code->exprResultAddr);
 	code->addNOP();
+	code->addComment("=== Subtraction End ===");
 }

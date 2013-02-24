@@ -18,6 +18,7 @@ std::string GreaterOrEqual::explain(int ind)
 }
 
 void GreaterOrEqual::generate(CodeContainer *code, SymbolTable *table) {
+	code->addComment( "GreaterOrEqual" );
 	Greater *greater =  new Greater( 0, addend, augend );
 	Not *nott = new Not( 0, greater );
 	nott->generate( code, table );

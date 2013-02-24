@@ -22,10 +22,11 @@ std::string Equal::explain(int ind)
 void Equal::generate(CodeContainer *code, SymbolTable *table)
 {
 // idea: (a == b) -> if(a-b) return 0; else return 1;
+	code->addComment( "Equal" );
 	Expression *sub = new Subtraction( 0, augend, addend );
 	Command *one  = new CommandExprResult( 0, new ExpressionNum( 0, 1 ) );
 	Command *zero = new CommandExprResult( 0, new ExpressionNum( 0, 0 ) );
-	If *iff = new If( 0, sub, one, zero );
+	If *iff = new If( 0, sub, zero, one );
 	iff->generate( code, table );
-
+	code->push_back( 0xDEB6 ) ;
 }

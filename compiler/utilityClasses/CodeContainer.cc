@@ -156,7 +156,7 @@ void CodeContainer::addStackPush( int addr )
 	//instr.code = oneAddr;
 	//code[pos] = instr; //write address of the 1 to the codeContainer
 	//codeContainer[pos] = instr; //write address of the 1 to the codeContainer
-	
+	addComment( "EndStackPush" );
 }
 
 void CodeContainer::addStackPop( int addr )
@@ -195,6 +195,7 @@ void CodeContainer::addStackPop( int addr )
 	push_back(clearAddr); // (0-1)
 	push_back(clearAddr); // skipped or zero
 	push_back(stackPointerAddr); // (*stackPointerAddr) + 1
+	addComment( "EndStackPop" );
 
 }
 

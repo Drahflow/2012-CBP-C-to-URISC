@@ -19,13 +19,14 @@ std::string Greater::explain(int ind)
   return expl.str();
 }
 
-void Greater::generate(CodeContainer *code, SymbolTable *table)
+void Greater::generate(CodeContainer *code, SymbolTable *symbols)
 {
 // augend > addend
 // idea: (a > b) -> a-b borrows if false, so we can write a number into a cell at the skipped position, then use if;
-	addend->generate( code, table );
+	code->addComment("Greater");
+	augend->generate( code, symbols );
 	code->addStackPush( code->exprResultAddr );
-	augend->generate( code, table ); // put augend to exprResultAddr
+	addend->generate( code, symbols ); // put augend to exprResultAddr
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr ); // clear *clearAddr
@@ -62,5 +63,5 @@ void Greater::generate(CodeContainer *code, SymbolTable *table)
 	Command *one  = new CommandExprResult( 0, new ExpressionNum( 0, 1 ) );
 	Command *zero = new CommandExprResult( 0, new ExpressionNum( 0, 0 ) );
 	If *iff = new If( 0, empty, one, zero );
-	iff->generate( code, table );
+	iff->generate( code, symbols );
 }

@@ -45,9 +45,11 @@ void Greater::generate(CodeContainer *code, SymbolTable *symbols)
 	code->addStackPop( code->tempAddr ); // put addend to tempAddr = b
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
+	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr ); // clear clearAddr
 	code->push_back( code->exprResultAddr ); // akk = -a
 	code->push_back( code->clearAddr ); // *clearAddr = a
+	code->push_back( code->exprResultAddr ); // 
 	code->push_back( code->exprResultAddr ); // 
 	code->push_back( code->exprResultAddr ); // 
 	code->push_back( code->exprResultAddr ); // clear *exprResultAddr and akk

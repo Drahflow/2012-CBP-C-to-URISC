@@ -28,5 +28,4 @@ void Equal::generate(CodeContainer *code, SymbolTable *table)
 	Command *zero = new CommandExprResult( 0, new ExpressionNum( 0, 0 ) );
 	If *iff = new If( 0, sub, zero, one );
 	iff->generate( code, table );
-	code->push_back( 0xDEB6 ) ;
 }

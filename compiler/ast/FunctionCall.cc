@@ -17,6 +17,7 @@ std::string FunctionCall::explain(int ind)
 
 void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 {
+	code->addNOP();
 	code->addComment("start functionCall");
 	SymbolTable::Variable functionVariable = symbols->resolveVariable( name_ );
 	int functionAddress = code->allocate( functionVariable.addr );
@@ -53,8 +54,20 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
 	code->push_back( code->clearAddr );
-	code->push_back( functionAddress ); // write address to akk
-	code->push_back( code->address() + 2 );
+	code->push_back( code->tempAddr );
+	code->push_back( code->tempAddr );
+	code->push_back( code->tempAddr );
+	code->push_back( code->tempAddr );
+	code->push_back( code->address() + 11 );
+	code->push_back( code->clearAddr ); // - Address
+	code->push_back( code->clearAddr ); // skipped or zero
+	code->push_back( code->tempAddr ); // 0 - -Address = Address
+	code->push_back( code->tempAddr ); // skipped or zero
+	code->push_back( code->clearAddr );
+	code->push_back( code->clearAddr );
+	code->push_back( code->clearAddr );
+	code->push_back( functionAddress );
+	code->push_back( code->tempAddr ); // address - functionAddress (should not skip)
 	code->push_back( 0 ); // perform jump
 	//code->address();
 	code->push_back( code->address() - 1 );
@@ -70,6 +83,7 @@ void FunctionCall::generate(CodeContainer* code, SymbolTable* symbols)
 	code->addStackPop( code->tempAddr ); //pops return address from stack
 	for(rit = values_->rbegin(); rit!=values_->rend(); ++rit) 
 	{
+		code->addNOP();
 		code->addStackPop( code->tempAddr ); //pops parameters from stack
 	}
 	code->addStackPop( code->functionStackPointerAddr );

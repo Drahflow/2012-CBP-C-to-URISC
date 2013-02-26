@@ -21,6 +21,7 @@ void While::generate(CodeContainer* code, SymbolTable* table)
 	code->addComment("=== While:");
 	// get address of first loop instruction
 	pcBeginLoop = code->address();
+	code->addNOP();
 	// allocate memory for jump address
 	beginLoopAddr = code->allocate();
 	
@@ -37,6 +38,7 @@ void While::generate(CodeContainer* code, SymbolTable* table)
 // callback function to CommandWrapper, adds GOTO *beginLoopAddr
 void While::genEpilogue(CodeContainer* code, SymbolTable* table)
 {
+	code->addNOP();
 	code->addComment("=== load jump delta to loop head");
 	code->addLoad(beginLoopAddr);
 	code->addComment("=== jump to loop head");

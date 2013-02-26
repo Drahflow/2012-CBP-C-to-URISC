@@ -67,7 +67,6 @@ int main(void)
   int nextrow;
  
   *1 = 1; // enable display output
-  drawbyte( 0, 0x80);
   nextrow = 0x0080;
   
   i = 0;

@@ -104,4 +104,5 @@ void Assignment::generate(CodeContainer *code, SymbolTable *table)
 		//code->push_back(0xDEB6);
 		code->push_back(code->clearAddr); //
 	}
+	code->addNOP();
 }

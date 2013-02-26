@@ -16,7 +16,7 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
   const SymbolTable::Variable &var = symbols->resolveVariable(name);
 
   code->addComment("access to " + name);
-
+	code->addNOP();
   if(var.global) {
     code->addClear(code->exprResultAddr);
     code->push_back(code->clearAddr);
@@ -55,4 +55,5 @@ void ExpressionName::generate(CodeContainer *code, SymbolTable *symbols) {
     code->push_back(code->clearAddr); // skipped (or *(original expr) == 0)
     code->push_back(code->exprResultAddr); // expr = acc = --*(original expr)
   }
+	code->addNOP();
 }

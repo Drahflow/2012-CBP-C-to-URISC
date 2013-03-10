@@ -1,0 +1,109 @@
+\documentclass{beamer}
+
+\useoutertheme[section]{tubs}
+%\useinnertheme{rounded}
+
+\setbeamertemplate{itemize items}[ball]
+%\setbeamertemplate{itemize items}[square]
+%\setbeamertemplate{itemize items}[tusquare]
+
+%~ \usetheme{Boadilla}
+%~ \usecolortheme{beaver}
+\usefonttheme{professionalfonts}
+%~ \useinnertheme{rounded}
+\setbeamercovered{transparent}
+\beamertemplatenavigationsymbolsempty
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{lmodern}
+\usepackage{multicol}
+
+\usepackage{xspace}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{stmaryrd,marvosym}
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{ngerman}
+
+\usepackage{listings}
+
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,shapes}
+
+%~ \usepackage{figures/petri}
+%~ \usepackage{macros}
+
+%~ \newcommand\col{120pt} % space between the two columns
+%~ \newcommand\row{50pt} % n times \row specifies the nth row
+
+\newcommand\lmul{\ensuremath{\{\!|}\xspace}
+\newcommand\rmul{\ensuremath{|\!\}}\xspace}
+\newcommand\premul[1]{\ensuremath{{}^\circ #1}\xspace}
+\newcommand\postmul[1]{\ensuremath{#1^\circ}\xspace}
+
+\title{Compilerbaupraktikum}
+\subtitle{Entwicklung eines URISC Compilers mit Bison}
+\author[foo]{bar}
+\institute[IPS]{Institute for Programming and Reactive Systems}
+\date{12.03.2013}
+
+\instlogo{ips_deu}
+\titlegraphic{iz}
+
+\begin{document}
+
+\frame[plain]{\titlepage}
+
+\setbeamercolor{frametitle}{fg=white,bg=tu-red}
+
+\begin{frame}{Die Architektur: uRISC - RSSB}
+\framesubtitle{reverse subtract and skip if borrow}
+\begin{itemize}
+	\item Bei einer uRISC-Architektur gibt es nur eine CPU Instruktion
+	\item Bei RSSB gibt es ein Akkumulatorregister und den Speicher. Der Programmzähler befindet sich an der Speicheradresse 0. 
+	\item Bei RSSB wird der Akkumulator vom Wert in der Speicheradresse abgezogen, und das Ergebnis wird im Akkumulator und an der Speicheradresse gespeichert.
+	\item Gibt es einen Integer Underflow, so wird die nächste Instruktion übersprungen, ansonsten wird der Programmzähler inkrementiert.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Die Sprache}
+\begin{itemize}
+	\item Die Sprache ist ein Subset von C
+	\item Einziger Datentyp: 16-bit Integer
+	\item globale und lokale Variablen sowie Listen
+	\item for- und while-Schleifen
+	\item Funktionsaufrufe mit Rückgabewerten
+	\item If-Anweisung
+	\item Expressions (= ,+ ,- , \&, >, <, ==, !, (, ), *)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sprünge}
+\begin{itemize}
+	\item Da der Programmzähler an Speicheradresse 0 ist, lassen sich Sprünge dadurch Implementieren, dass man dort den Richtigen Wert hineinschreibt
+	
+	\texttt{01: rssb 7FFF; clear akkumulator}\\
+	\texttt{02: rssb 7FFF}\\
+	\texttt{03: rssb 7FFF}\\
+	\texttt{04: rssb CF1; lädt die zahl 10 von Adresse cf1} \\
+	\texttt{05: 0; 10-5=B, Sprung zu position B} \\
+	\texttt{CF1: 10}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{bedingte Sprünge}
+\end{frame}
+
+\begin{frame}{example.c}
+\begin{itemize}
+	\item Zeigen der example.c
+	\item Compilieren der example.c
+	\item Ausführen der example.c
+\end{itemize}
+\end{frame}
+
+\end{document}

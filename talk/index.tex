@@ -62,7 +62,7 @@
 \begin{frame}{Die Architektur: uRISC - RSSB}
 \framesubtitle{reverse subtract and skip if borrow}
 \begin{itemize}
-	\item Bei einer uRISC-Architektur gibt es nur eine CPU Instruktion
+	\item Bei einer uRISC-Architektur gibt es nur eine CPU Instruktion (ist dennoch turing-vollständig)
 	\item Bei RSSB gibt es ein Akkumulatorregister und den Speicher. Der Programmzähler befindet sich an der Speicheradresse 0. 
 	\item Bei RSSB wird der Akkumulator vom Wert in der Speicheradresse abgezogen, und das Ergebnis wird im Akkumulator und an der Speicheradresse gespeichert.
 	\item Gibt es einen Integer Underflow, so wird die nächste Instruktion übersprungen, ansonsten wird der Programmzähler inkrementiert.
@@ -73,37 +73,84 @@
 \begin{itemize}
 	\item Die Sprache ist ein Subset von C
 	\item Einziger Datentyp: 16-bit Integer
-	\item globale und lokale Variablen sowie Listen
+	\item globale und lokale Variablen sowie Arrays
 	\item for- und while-Schleifen
 	\item Funktionsaufrufe mit Rückgabewerten
 	\item If-Anweisung
-	\item Expressions (= ,+ ,- , \&, >, <, ==, !, (, ), *)
+	\item Operatoren (= ,+ ,- ,* , /, \&, |,  >, <, ==, !, (, ),)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Implementierung}
+\begin{itemize}
+	\item C++ (gcc)
+	\item Flex
+	\item Bison
+	\item Nichtterminale als Klassenhierarchie
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Codegenerierung}
+\begin{itemize}
+	\item uRISC: Programm ist lediglich eine Folge von Adressen und ein angehängtes Datensegment
+	\item Problem: absolute Adressen innerhalb des Datensegments können nicht unmittelbar bestimmt werden
+	\item daher zwei Durchläufe:
+	\begin{enumerate}
+		\item Generierung der Instruktionen; Bestimmung der Länge des Programms
+		\item Ersetzen von temporären Adressreferenzen im bereits generierten Code
+	\end{enumerate}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Sprünge}
 \begin{itemize}
-	\item Da der Programmzähler an Speicheradresse 0 ist, lassen sich Sprünge dadurch Implementieren, dass man dort den Richtigen Wert hineinschreibt
+	\item Da der Programmzähler an Speicheradresse 0 ist, lassen sich Sprünge dadurch implementieren, dass man dort den richtigen Wert hineinschreibt
 	
-	\texttt{01: rssb 7FFF; clear akkumulator}\\
+	\texttt{01: rssb 7FFF; Akkumulator nullen}\\
 	\texttt{02: rssb 7FFF}\\
 	\texttt{03: rssb 7FFF}\\
 	\texttt{04: rssb CF1; lädt die zahl 10 von Adresse cf1} \\
-	\texttt{05: 0; 10-5=B, Sprung zu position B} \\
+	\texttt{05: rssb 0; 10-5=B, Sprung zu position B} \\
 	\texttt{CF1: 10}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{bedingte Sprünge}
-\end{frame}
-
-\begin{frame}{example.c}
+\begin{frame}{Bedingte Sprünge -- If-Anweisung}
 \begin{itemize}
-	\item Zeigen der example.c
-	\item Compilieren der example.c
-	\item Ausführen der example.c
+	\item jump if zero: Sprung genau dann, wenn Akkumulator gleich Null:
+		
+	\texttt{0a: rssb EEEE; 0 - acc berechnen }\\
+	\textcolor{red}{\texttt{0b: rssb ABCD; Sprungdelta aus Speicher laden}}\\
+	\texttt{; acc' = 0 - *ABCD bzw.  acc' = -acc - (-acc) = 0}\\
+	\texttt{0c: rssb EEEE;}\\
+	\textcolor{cyan}{\texttt{0d: rssb DEC1; -1 laden (Programmzähler erhöhen)}}\\
+	\texttt{0e: rssb 0; Programmzähler setzen}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{Stack}
+
+\end{frame}
+
+\begin{frame}{Ausblick}
+\begin{itemize}
+	\item Optimierungen (z.B. Constant folding/propagation)
+	\item Erweiterung des Typsystems (double, char, Structs, String-Literale)
+	\item Forward-Deklarationen
+	\item Pointer-Arithmetik (inkl. \&-Operator)
+	\item ...
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Demo -- example.c}
+%\begin{itemize}
+%	\item Zeigen der example.c
+%	\item Compilieren der example.c
+%	\item Ausführen der example.c
+%\end{itemize}
+\end{frame}
+
+
 
 \end{document}
